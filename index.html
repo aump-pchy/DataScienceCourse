@@ -57,9 +57,9 @@
 
 <script>
 // แก้รายการที่นี่ที่เดียว
-// status: 'done' เรียนแล้ว, 'open' เปิดแล้ว (ใส่ file), 'soon' ยังไม่เปิด
+// status: 'done' เรียนแล้ว (ใส่ file = ปุ่มทบทวน), 'open' เปิดแล้ว (ใส่ file = ปุ่มเปิดงาน), 'soon' ยังไม่เปิด
 const items = [
-  { id:'W1', kind:'core',   status:'done', title:'ทบทวน Python', note:'ตัวแปร เงื่อนไข ลูป ฟังก์ชัน' },
+  { id:'W1', kind:'core',   status:'done', title:'Python Warm-up', note:'ตัวแปร if-else for loop ฟังก์ชัน', file:'w1.html' },
   { id:'S0', kind:'sprint', status:'open', title:'Colab Starter', note:'ย้าย Python ที่ทบทวนมาทำบน Colab กับข้อมูลคะแนนจริง', file:'s0.html' },
   { id:'C1', kind:'core',   status:'soon', title:'NumPy', note:'array, vectorized ops, สถิติพื้นฐาน' },
   { id:'C2', kind:'core',   status:'soon', title:'Pandas: สำรวจข้อมูล', note:'DataFrame, read_csv, info, describe, filter' },
@@ -84,12 +84,14 @@ const track = document.getElementById('track');
 items.forEach(it => {
   const li = document.createElement('li');
   li.className = `item ${it.kind === 'sprint' ? 'sprint' : 'core'} ${it.status}`;
-  const act = it.status === 'open' && it.file
+  const act = it.file && it.status === 'open'
     ? `<a class="btn" href="${it.file}">เปิดงาน</a>`
+    : it.file && it.status === 'done'
+    ? `<a class="btn" href="${it.file}" style="background:var(--core);color:var(--ink)">ทบทวน</a>`
     : `<span class="tag ${it.status}">${label[it.status]}</span>`;
   li.innerHTML = `
     <div class="dot" aria-hidden="true">${it.id}</div>
-    <div class="card"><div class="txt"><b>${it.id === 'W1' ? '' : it.id + ' '}${it.title}</b><small>${it.note}</small></div>${act}</div>`;
+    <div class="card"><div class="txt"><b>${it.id} ${it.title}</b><small>${it.note}</small></div>${act}</div>`;
   track.appendChild(li);
 });
 </script>

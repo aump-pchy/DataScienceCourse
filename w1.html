@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>W1 Python Warm-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-key="ds-w1-passed">
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/4 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">สัปดาห์ที่ 1 &nbsp;ทบทวน 4 เรื่องสำคัญก่อนลุยงานวิทยาศาสตร์ข้อมูล</p>
+    <h1>Python Warm-up: ร้านชาไทยหน้าโรงเรียน</h1>
+    <p>ร้านชาไทยแก้วละ 25 บาทจะเป็นโจทย์ของเราทั้งหน้า เราจะคิดรายได้ เช็คเป้ายอดขาย รวมยอดหลายวัน และสร้างฟังก์ชันไว้ใช้ซ้ำ ซึ่งเป็น 4 อย่างที่งาน Data Science ใช้ทุกวัน</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทบทวนหน้านี้ครบแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>ใช้ตัวแปรและตัวดำเนินการคำนวณตัวเลขจากข้อมูลจริงได้</li>
+    <li>ใช้ <code>if</code> / <code>else</code> ให้โปรแกรมตัดสินใจตามเงื่อนไขได้</li>
+    <li>ใช้ <code>for</code> วนรวมข้อมูลทั้งลิสต์ได้</li>
+    <li>สร้างฟังก์ชันด้วย <code>def</code> ที่รับข้อมูลเข้าไปแล้ว <code>return</code> ผลลัพธ์ออกมาได้</li>
+    <li>ใช้ Gen AI ช่วยเขียนโค้ด แล้วตรวจเองได้ว่าโค้ดถูกจริง</li>
+  </ul>
+  <p class="sub" style="margin-top:12px">ทำไมต้องทบทวน: Pandas, NumPy, Matplotlib และ Machine Learning ที่จะเรียนต่อจากนี้ สร้างจาก 4 เรื่องนี้ทั้งหมด ถ้าพื้นฐานแน่น บทต่อ ๆ ไปจะไม่สะดุด</p>
+
+  <h2>ใช้ AI ในงานนี้: AI Work, Human Verify</h2>
+  <p>ให้ AI ช่วยเขียนได้ แต่<b>คนส่งงานคือเรา</b> ต้องตรวจและรับผิดชอบทุกบรรทัด</p>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอกโจทย์ ข้อมูล และผลที่ต้องได้ให้ชัด</li>
+        <li>สั่งให้แก้เฉพาะ <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>ขอให้อธิบายทีละบรรทัดด้วยภาษาง่าย ๆ</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยไม่แตะ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดตัวเอง</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจในกรอบเส้นประ และทายผลก่อนรัน</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">ข้อไหนใช้ AI ให้เขียน <b>AI Log</b> ใต้ข้อนั้นใน Text cell ว่าถาม AI ว่าอะไร และตรวจด้วยวิธีไหน</div>
+
+  <div class="note tip">ทำใน Google Colab ทีละข้อต่อ 1 Code cell กดปุ่ม <b>คัดลอก</b> แล้วเติมตรง <code>TODO</code> ถ้ายังเปิด Colab ไม่เป็น ดูวิธีในหน้า <a href="s0.html">S0 Colab Starter</a> หัวข้อ "เริ่มที่นี่"</div>
+
+  <section class="task" data-task="1">
+    <div class="task-head"><h3>Quest 01 ตัวแปรและตัวดำเนินการ</h3><span class="who">รายได้วันนี้</span></div>
+    <p>ร้านขายชาไทยแก้วละ 25 บาท วันนี้ขายได้ 18 แก้ว ให้คำนวณรายได้ทั้งหมด</p>
+<div class="code"><pre><code>price = 25
+quantity = 18
+
+# TODO: คำนวณรายได้ เก็บไว้ในตัวแปร total
+total = 0
+
+print("รายได้ทั้งหมด:", total, "บาท")
+assert total == 450, "ยังไม่ถูก รายได้ = ราคา x จำนวน"
+print("✅ Quest 01 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>เครื่องหมายคูณใน Python คือ <code>*</code></div></details>
+    <div class="verify"><b>Human Verify:</b> เปลี่ยน <code>quantity = 20</code> แล้ว<b>ทายก่อนรัน</b>ว่ารายได้เป็นเท่าไร ถ้าทายถูกแปลว่าเข้าใจโค้ดจริง จากนั้นเปลี่ยนกลับเป็น 18</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Quest 01 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="2">
+    <div class="task-head"><h3>Quest 02 การเลือกทำ if - else</h3><span class="who">ถึงเป้าไหม</span></div>
+    <p>ร้านตั้งเป้าว่าต้องมีรายได้อย่างน้อย 500 บาทต่อวัน ให้เช็คว่าวันนี้ถึงเป้าหรือยัง</p>
+<div class="code"><pre><code>sales = 650
+target = 500
+
+# TODO: ถ้ายอดขายถึงเป้า ให้ message = "ยอดขายถึงเป้าหมาย"
+#       ถ้าไม่ถึง ให้ message = "ยอดขายยังไม่ถึงเป้าหมาย"
+message = ""
+
+print(message)
+assert message == "ยอดขายถึงเป้าหมาย"
+print("✅ Quest 02 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>โจทย์บอกว่า "อย่างน้อย" 500 แปลว่า 500 พอดีก็ถือว่าถึงเป้า ลองคิดว่าควรใช้ <code>&gt;</code> หรือ <code>&gt;=</code></div></details>
+    <div class="verify"><b>Human Verify:</b> เปลี่ยน <code>sales = 500</code> แล้ว<b>ทายก่อนรัน</b>ว่าจะขึ้นข้อความไหน ถ้าผลไม่ตรงกับความหมายของคำว่า "อย่างน้อย" แปลว่าเงื่อนไขยังผิด แม้ assert ตอน 650 จะผ่านก็ตาม</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Quest 02 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="3">
+    <div class="task-head"><h3>Quest 03 การทำซ้ำ for loop</h3><span class="who">ยอดขาย 5 วัน</span></div>
+    <p>ยอดขายจันทร์ถึงศุกร์คือ 200, 350, 400, 250, 500 บาท ให้ใช้ <code>for</code> รวมยอดขายทั้งหมด</p>
+<div class="code"><pre><code>sales = [200, 350, 400, 250, 500]
+total = 0
+
+# TODO: ใช้ for loop บวกยอดขายแต่ละวันเข้าไปใน total
+
+print("ยอดขายรวม:", total, "บาท")
+assert total == 1700
+print("✅ Quest 03 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>for s in sales:</code> แล้วข้างในเขียน <code>total = total + s</code> หรือ <code>total += s</code> ข้อนี้ห้ามใช้ <code>sum()</code> นะ ให้ฝึกลูปก่อน</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>ทายก่อน</b>ว่าหลังวนครบวันพุธ <code>total</code> เป็นเท่าไร แล้วเพิ่ม <code>print(s, total)</code> ไว้ในลูปเพื่อดูค่าทีละรอบว่าทายถูกไหม ถ้า AI ใช้ <code>sum()</code> มา ให้สั่งแก้เป็นลูป</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Quest 03 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="4">
+    <div class="task-head"><h3>Quest 04 ฟังก์ชัน def</h3><span class="who">หาค่าเฉลี่ย</span></div>
+    <p>สร้างฟังก์ชัน <code>calculate_average()</code> ที่รับลิสต์คะแนนเข้าไป แล้ว <code>return</code> ค่าเฉลี่ยออกมา</p>
+<div class="code"><pre><code># TODO: สร้างฟังก์ชัน calculate_average(scores)
+#       รับลิสต์คะแนน แล้ว return ค่าเฉลี่ย
+def calculate_average(scores):
+    return 0
+
+scores = [70, 80, 65, 90, 95]
+average = calculate_average(scores)
+print("คะแนนเฉลี่ย:", average)
+
+assert average == 80.0
+assert calculate_average([10, 20]) == 15.0
+print("✅ Quest 04 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ค่าเฉลี่ย = ผลรวม หารด้วย จำนวนข้อมูล ใช้ loop รวมแบบ Quest 03 แล้วหารด้วย <code>len(scores)</code></div></details>
+    <div class="verify"><b>Human Verify:</b> <b>ทายก่อนรัน</b>ว่า <code>calculate_average([100, 50, 60])</code> ได้เท่าไร แล้วลองรันดู จากนั้นตอบใน AI Log ว่าถ้าเปลี่ยน <code>return</code> เป็น <code>print</code> ในฟังก์ชัน ตัวแปร <code>average</code> จะได้ค่าอะไร เพราะอะไร</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Quest 04 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>Bonus Challenge รวมทักษะทั้ง 4</h3><span class="who">ไม่บังคับ</span></div>
+    <p>สร้างฟังก์ชัน <code>analyze_sales(sales)</code> ที่รับยอดขาย 5 วัน แล้ว</p>
+    <ol class="steps">
+      <li>ใช้ <code>for</code> รวมยอดขายทั้งหมด</li>
+      <li>คำนวณค่าเฉลี่ยต่อวัน</li>
+      <li>ใช้ <code>if</code> / <code>else</code> เช็คว่ายอดรวมถึงเป้า 1,500 บาทหรือไม่</li>
+      <li>แสดงผล 3 บรรทัด แล้ว <code>return</code> ค่าเฉลี่ย</li>
+    </ol>
+<div class="code"><pre><code>def analyze_sales(sales):
+    # TODO: เขียนตามขั้นตอน 1-4
+    return 0
+
+sales = [320, 280, 450, 300, 600]
+avg = analyze_sales(sales)
+
+assert avg == 390.0
+print("✅ Bonus ผ่าน")</code></pre></div>
+    <p class="sub">ผลที่ควรเห็น: ยอดขายรวม 1950 บาท, ค่าเฉลี่ยต่อวัน 390.0 บาท, ยอดขายถึงเป้าหมาย</p>
+    <div class="verify"><b>Human Verify:</b> ถ้าเปลี่ยนเป้าเป็น 2,000 บาท <b>ทายก่อน</b>ว่าบรรทัดไหนเปลี่ยน และ <code>avg</code> ยังเป็น 390.0 ไหม แล้วรันดู</div>
+  </section>
+
+  <h2>Exit Ticket: พร้อมเรียน Data Science หรือยัง</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบสั้น ๆ</p>
+  <ol class="steps">
+    <li>Quest ไหนที่ยังไม่มั่นใจที่สุด เพราะอะไร</li>
+    <li>Human Verify ข้อไหนที่ทายผิด แล้วตอนนี้เข้าใจว่าทำไมผิด</li>
+  </ol>
+  <div class="note">ผ่านครบ 4 Quest แล้ว ไปต่อที่ <a href="s0.html">S0 Colab Starter</a> เราจะเอา 4 เรื่องนี้มาใช้กับข้อมูลคะแนนสอบทั้งห้อง</div>
+</main>
+
+<script src="lesson.js"></script>
+</body>
+</html>
