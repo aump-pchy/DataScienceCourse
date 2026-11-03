@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>การโปรแกรมสำหรับงานวิทยาศาสตร์ข้อมูล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.track{list-style:none; padding:0; margin:20px 0 0; position:relative}
+.track::before{content:""; position:absolute; left:19px; top:8px; bottom:8px; width:3px; background:var(--core); border-radius:2px}
+.item{position:relative; display:grid; grid-template-columns:40px 1fr; gap:14px; align-items:center; padding:10px 0}
+.dot{width:40px; height:40px; border-radius:50%; background:var(--sheet); border:3px solid var(--core); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--ink); position:relative; z-index:1}
+.item.done .dot{background:var(--core)}
+.card{background:var(--sheet); border:1px solid var(--line); border-radius:6px; padding:10px 14px; line-height:1.45; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.card .txt{flex:1 1 220px}
+.card small{display:block; color:var(--muted); font-size:14px; margin-top:2px}
+.item.sprint{padding-left:44px}
+.item.sprint::before{content:""; position:absolute; left:21px; top:50%; width:44px; border-top:3px dashed var(--sprint)}
+.item.sprint .dot{border-color:var(--sprint); border-radius:8px; color:var(--text)}
+.item.sprint.open .dot{background:var(--sprint)}
+.item.sprint .card{border-left:5px solid var(--sprint)}
+.item.open .card{background:color-mix(in srgb, var(--mark) 20%, var(--sheet))}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; font-size:14px; color:var(--muted); margin-top:6px}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{width:16px; height:16px; border:3px solid var(--core); border-radius:50%; display:inline-block}
+.legend i.sq{border-color:var(--sprint); border-radius:4px}
+@media (max-width:560px){
+  .item.sprint{padding-left:28px}
+  .item.sprint::before{width:28px}
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="sub">21906-2006 &nbsp;ปวช. สาขาเทคโนโลยีปัญญาประดิษฐ์ &nbsp;ท1 ป4 3 หน่วยกิต</p>
+    <h1>การโปรแกรมสำหรับงานวิทยาศาสตร์ข้อมูล</h1>
+    <p>เขียน Python บน Google Colab เพื่อจัดการข้อมูล ทำกราฟ หาข้อสรุป แล้วสร้างโมเดล Machine Learning ตัวแรกของเรา</p>
+    <div class="legend">
+      <span><i></i>บทเรียนกับครู</span>
+      <span><i class="sq"></i>Sprint ทำเองได้</span>
+    </div>
+  </header>
+
+  <div class="note tip">
+    <b>สัปดาห์ไหนครูไม่อยู่</b> ให้เปิด Sprint ล่าสุดที่มีปุ่ม "เปิดงาน" แล้วทำใน Colab ตามหน้านั้น ส่งลิงก์ notebook ท้ายคาบเหมือนเดิม ถ้าทำ Sprint นั้นเสร็จแล้ว ให้ทบทวนข้อที่ยังไม่ผ่าน
+  </div>
+  <div class="note">
+    <b>ใช้ AI ได้ทั้งเทอม แบบ AI Work, Human Verify</b> ให้ AI ช่วยเขียนได้ แต่งานที่ส่งต้องรันผ่าน อธิบายได้ทุกบรรทัด และทดสอบเองแล้ว พร้อมจด AI Log ไว้ใน notebook
+  </div>
+
+  <ol class="track" id="track" aria-label="ลำดับบทเรียนและ Sprint"></ol>
+</main>
+
+<script>
+// แก้รายการที่นี่ที่เดียว
+// status: 'done' เรียนแล้ว, 'open' เปิดแล้ว (ใส่ file), 'soon' ยังไม่เปิด
+const items = [
+  { id:'W1', kind:'core',   status:'done', title:'ทบทวน Python', note:'ตัวแปร เงื่อนไข ลูป ฟังก์ชัน' },
+  { id:'S0', kind:'sprint', status:'open', title:'Colab Starter', note:'ย้าย Python ที่ทบทวนมาทำบน Colab กับข้อมูลคะแนนจริง', file:'s0.html' },
+  { id:'C1', kind:'core',   status:'soon', title:'NumPy', note:'array, vectorized ops, สถิติพื้นฐาน' },
+  { id:'C2', kind:'core',   status:'soon', title:'Pandas: สำรวจข้อมูล', note:'DataFrame, read_csv, info, describe, filter' },
+  { id:'C3', kind:'core',   status:'soon', title:'Pandas: ทำความสะอาดข้อมูล', note:'ค่าว่าง ข้อมูลซ้ำ ชนิดข้อมูล คอลัมน์ใหม่' },
+  { id:'S1', kind:'sprint', status:'soon', title:'สำรวจและ clean ชุดข้อมูลใหม่', note:'ปลดล็อกหลัง C3' },
+  { id:'C4', kind:'core',   status:'soon', title:'Pandas: สรุปข้อมูล', note:'groupby, agg, pivot_table, merge' },
+  { id:'C5', kind:'core',   status:'soon', title:'กราฟด้วย Matplotlib และ Seaborn', note:'line, bar, hist, scatter, boxplot, heatmap' },
+  { id:'S2', kind:'sprint', status:'soon', title:'ตอบคำถามธุรกิจ 5 ข้อด้วยตารางและกราฟ', note:'ปลดล็อกหลัง C5' },
+  { id:'C6', kind:'core',   status:'soon', title:'สถิติและ EDA', note:'ค่ากลาง การกระจาย correlation outlier' },
+  { id:'S3', kind:'sprint', status:'soon', title:'Mini EDA ครบวงจร', note:'ปลดล็อกหลัง C6' },
+  { id:'C7', kind:'core',   status:'soon', title:'Machine Learning ตัวแรก: Regression', note:'train_test_split, LinearRegression, predict' },
+  { id:'C8', kind:'core',   status:'soon', title:'ประเมินโมเดล', note:'MAE, RMSE, R², encoding' },
+  { id:'S4', kind:'sprint', status:'soon', title:'ทำนายกับชุดข้อมูลใหม่ แล้วปรับให้แม่นขึ้น', note:'ปลดล็อกหลัง C8' },
+  { id:'C9', kind:'core',   status:'soon', title:'Classification', note:'Decision Tree, KNN, confusion matrix' },
+  { id:'C10',kind:'core',   status:'soon', title:'Clustering', note:'scaling, K-Means, elbow' },
+  { id:'C11',kind:'core',   status:'soon', title:'Final Project: เริ่มโปรเจกต์', note:'เลือกโจทย์และชุดข้อมูล วางแผน' },
+  { id:'C12',kind:'core',   status:'soon', title:'Final Project: นำเสนอ', note:'notebook สมบูรณ์ + นำเสนอผล' },
+];
+
+const label = { done:'เรียนแล้ว', open:'เปิดแล้ว', soon:'ยังไม่เปิด' };
+const track = document.getElementById('track');
+items.forEach(it => {
+  const li = document.createElement('li');
+  li.className = `item ${it.kind === 'sprint' ? 'sprint' : 'core'} ${it.status}`;
+  const act = it.status === 'open' && it.file
+    ? `<a class="btn" href="${it.file}">เปิดงาน</a>`
+    : `<span class="tag ${it.status}">${label[it.status]}</span>`;
+  li.innerHTML = `
+    <div class="dot" aria-hidden="true">${it.id}</div>
+    <div class="card"><div class="txt"><b>${it.id === 'W1' ? '' : it.id + ' '}${it.title}</b><small>${it.note}</small></div>${act}</div>`;
+  track.appendChild(li);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>S0 Colab Starter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--paper); border-bottom:1px solid var(--line)}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--paper)}
+.bar-in{max-width:820px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; gap:14px; font-size:15px}
+.bar a{text-decoration:none; font-weight:600}
+.meter{flex:1; height:8px; background:var(--grid); border-radius:4px; overflow:hidden}
+.meter i{display:block; height:100%; width:0; background:var(--ink); transition:width .25s}
+.count{color:var(--muted); white-space:nowrap}
+.task{background:var(--sheet); border:1px solid var(--line); border-left:5px solid var(--sprint); border-radius:6px; padding:18px 20px; margin:18px 0}
+.task.passed{border-left-color:var(--ok)}
+.task-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap}
+.who{font-size:14px; color:var(--muted)}
+.code{position:relative; margin:12px 0}
+.code pre{margin:0; background:var(--code); border:1px solid var(--line); border-radius:6px; padding:40px 16px 14px; overflow-x:auto; font-size:14.5px; line-height:1.55}
+.code pre code{background:none; padding:0; font-size:inherit}
+.copy{position:absolute; top:8px; right:8px; font:inherit; font-size:13px; font-weight:600; border:1px solid var(--line); background:var(--sheet); color:var(--ink); border-radius:4px; padding:2px 10px; cursor:pointer}
+.copy.ok{color:var(--ok)}
+details{margin:10px 0 4px}
+summary{cursor:pointer; font-weight:600; color:var(--ink)}
+details > div{padding:8px 0 0 4px}
+label.check{display:flex; gap:10px; align-items:center; margin-top:10px; font-weight:600; cursor:pointer}
+label.check input{width:20px; height:20px; accent-color:var(--ok)}
+.c{color:var(--muted)}
+.gains{list-style:none; padding:0; margin:10px 0 0; display:grid; gap:8px}
+.gains li{background:var(--sheet); border:1px solid var(--line); border-radius:6px; padding:10px 14px 10px 44px; position:relative; line-height:1.5}
+.gains li::before{content:"✓"; position:absolute; left:14px; top:9px; width:20px; height:20px; border-radius:50%; background:var(--core); color:var(--ink); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center}
+.loop{display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin:14px 0; background:var(--sheet)}
+.loop > div{padding:16px 18px}
+.loop .ai{background:color-mix(in srgb, var(--sprint) 45%, var(--sheet))}
+.loop .hv{background:color-mix(in srgb, var(--core) 45%, var(--sheet))}
+.loop h3{margin-bottom:8px}
+.loop ol{margin:0; padding-left:20px}
+.loop li{margin:3px 0}
+.rules{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0}
+.rules > div{background:var(--sheet); border:1px solid var(--line); border-radius:6px; padding:14px 16px}
+.rules ul{margin:6px 0 0; padding-left:20px}
+.rules .no{border-top:4px solid var(--warn)} .rules .yes{border-top:4px solid var(--ok)}
+.verify{margin:12px 0 4px; padding:10px 14px; border:1px dashed var(--ink); border-radius:6px; background:color-mix(in srgb, var(--core) 25%, var(--sheet))}
+.verify b{color:var(--ink)}
+@media (max-width:600px){ .loop, .rules{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/6 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">Sprint 0 &nbsp;ใช้ความรู้จากการทบทวน Python สัปดาห์ที่ 1</p>
+    <h1>Colab Starter: วิเคราะห์คะแนนสอบทั้งห้อง</h1>
+    <p>รอบนี้ไม่มีคำสั่งใหม่ เราจะเอา list, dict, if, for, function ที่ทบทวนไปแล้ว มาใช้กับข้อมูลคะแนนจริงบน Google Colab ซึ่งเป็นเครื่องมือหลักของทั้งเทอม</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทำงานนี้เสร็จแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>สร้าง รัน บันทึก และแชร์ notebook บน Google Colab ได้ด้วยตัวเอง</li>
+    <li>ใช้ list, dict, loop, function หาค่าเฉลี่ย นับจำนวน และจัดกลุ่มข้อมูลได้</li>
+    <li>อ่านไฟล์ CSV และแปลงข้อความเป็นตัวเลขก่อนคำนวณได้</li>
+    <li>ใช้ <code>assert</code> ตรวจว่าโค้ดของตัวเองให้คำตอบถูกจริง</li>
+    <li>ใช้ Gen AI ช่วยเขียนโค้ด แล้วพิสูจน์เองได้ว่าโค้ดนั้นถูก และอธิบายได้ทุกบรรทัด</li>
+  </ul>
+  <p class="sub" style="margin-top:12px">ทำไมต้องเริ่มตรงนี้: งานวิทยาศาสตร์ข้อมูลทุกชิ้นคือการอ่านข้อมูล คำนวณ และสรุปผลแบบนี้ บทหน้าเราจะใช้ NumPy และ Pandas ทำสิ่งเดียวกันให้เร็วขึ้นมาก ถ้าเข้าใจวิธีทำมือก่อน จะรู้ว่าเครื่องมือพวกนั้นช่วยอะไรเรา</p>
+
+  <h2>ใช้ AI ในงานนี้: AI Work, Human Verify</h2>
+  <p>ใช้ Gemini ใน Colab หรือ AI ตัวไหนก็ได้ช่วยเขียนโค้ด แต่<b>คนส่งงานคือเรา</b> เราต้องตรวจและรับผิดชอบทุกบรรทัด ทำตามรอบนี้ทุกครั้งที่ใช้ AI</p>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอก AI ให้ชัด: โจทย์ข้อไหน ข้อมูลหน้าตายังไง ต้องได้ผลอะไร</li>
+        <li>สั่งให้แก้เฉพาะส่วน <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>ขอให้ AI อธิบายทีละบรรทัดด้วยภาษาง่าย ๆ</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยที่ไม่ได้แก้หรือลบ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดของตัวเอง ถ้าอธิบายไม่ได้ ถือว่ายังไม่ผ่าน</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจตรวจในกรอบเส้นประของแต่ละข้อ ทายผลก่อนรันทุกครั้ง</li>
+      </ol>
+    </div>
+  </div>
+  <div class="rules">
+    <div class="yes"><b>ทำได้</b>
+      <ul>
+        <li>ถามว่า error นี้แปลว่าอะไร</li>
+        <li>ขอคำใบ้ก่อน ยังไม่เอาโค้ดเต็ม</li>
+        <li>ให้ AI เขียน แล้วเราตรวจตามรอบ Human Verify</li>
+      </ul>
+    </div>
+    <div class="no"><b>ห้ามทำ</b>
+      <ul>
+        <li>แก้หรือลบ <code>assert</code> เพื่อให้ผ่าน</li>
+        <li>วางโค้ดที่ยังรันไม่ผ่านหรืออธิบายไม่ได้</li>
+        <li>ใส่ข้อมูลส่วนตัวของตัวเองหรือเพื่อนลงใน AI</li>
+      </ul>
+    </div>
+  </div>
+  <p>ข้อไหนที่ใช้ AI ช่วย ให้เพิ่ม Text cell ใต้ข้อนั้น เขียน <b>AI Log</b> 2 บรรทัด</p>
+<div class="code"><pre><code>AI Log ข้อ __
+ถาม AI ว่า: ...
+ตรวจแล้วโดย: รันผ่าน / อธิบายได้ / ทดสอบแล้วได้ผล ...</code></pre></div>
+  <details><summary>ตัวอย่างวิธีถาม AI ที่ดี</summary><div>
+<div class="code"><pre><code>ฉันกำลังเรียน Python พื้นฐานบน Colab
+ข้อมูลคือ scores = [72, 85, 64, ...] เป็นคะแนนสอบ
+ช่วยเติมเฉพาะส่วน TODO ให้นับคนที่ได้ 50 ขึ้นไป
+ใช้แค่ for กับ if ห้ามแก้บรรทัด assert
+แล้วอธิบายทีละบรรทัดแบบนักเรียน ปวช. เข้าใจ</code></pre></div>
+  </div></details>
+
+  <div class="box">
+    <h3>สิ่งที่ต้องส่ง</h3>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>S0_ชื่อเล่น_เลขที่</code> ที่รันผ่านครบ 6 ข้อ มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket ท้ายไฟล์ ส่งทางช่องทางส่งงานของห้อง</p>
+  </div>
+
+  <h2>เริ่มที่นี่: เปิด Colab</h2>
+  <p class="sub">ช่วงแรกทำพร้อมครู ถ้าครูไม่อยู่ก็ทำตามนี้ได้เลย</p>
+  <ol class="steps">
+    <li>เข้า <a href="https://colab.research.google.com" target="_blank" rel="noopener">colab.research.google.com</a> ล็อกอินด้วยบัญชี Google ของตัวเอง</li>
+    <li>กด <b>New notebook</b> แล้วคลิกชื่อไฟล์ด้านบนซ้าย เปลี่ยนเป็น <code>S0_ชื่อเล่น_เลขที่</code></li>
+    <li>ช่องที่พิมพ์โค้ดเรียกว่า <b>Code cell</b> กด <b>Shift + Enter</b> เพื่อรันแล้วไปช่องถัดไป</li>
+    <li>กด <b>+ Text</b> เพื่อเพิ่ม <b>Text cell</b> ไว้เขียนหัวข้อหรือคำอธิบาย เช่น <code># ข้อ 1</code></li>
+    <li>Colab บันทึกลง Google Drive ให้อัตโนมัติ อยู่ในโฟลเดอร์ <b>Colab Notebooks</b></li>
+  </ol>
+  <div class="note">ทำ 1 ข้อต่อ 1 Code cell กดปุ่ม <b>คัดลอก</b> ไปวางใน Colab แล้วเติมตรงที่เขียนว่า <code>TODO</code> รันแล้วเห็น <b>✅ ผ่าน</b> แปลว่าถูก ถ้าขึ้น <code>AssertionError</code> แปลว่ายังไม่ถูก อ่านข้อความแล้วแก้ใหม่</div>
+
+  <h2>ข้อมูลที่ใช้ทั้งชุด</h2>
+  <p>คะแนนสอบของนักเรียน 10 คน ทุกข้อใช้ข้อมูลชุดนี้ ต่อยอดจากข้อก่อนหน้า ดังนั้น <b>ต้องรันตามลำดับ</b> ถ้าปิด Colab แล้วเปิดใหม่ ให้กด <b>Runtime › Run all</b> ก่อน</p>
+
+  <section class="task" data-task="1">
+    <div class="task-head"><h3>ข้อ 1 ค่าเฉลี่ย สูงสุด ต่ำสุด</h3><span class="who">ทำพร้อมครู</span></div>
+    <p>ข้อนี้ไม่ต้องใช้ AI วางทั้งหมดแล้วรันได้เลย ดูว่าบรรทัด <code>assert</code> ทำงานยังไง แล้วลองเปลี่ยน <code>74.9</code> เป็น <code>75</code> ดูว่าเกิดอะไรขึ้น นี่คือเครื่องมือตรวจที่เราใช้ตรวจงานของ AI ตลอดเทอม</p>
+<div class="code"><pre><code>scores = [72, 85, 64, 91, 58, 77, 88, 49, 95, 70]
+
+avg = sum(scores) / len(scores)
+top = max(scores)
+low = min(scores)
+print("ค่าเฉลี่ย:", avg)
+print("สูงสุด:", top, "ต่ำสุด:", low)
+
+# เช็คคำตอบ ถ้าไม่ขึ้น error แปลว่าถูก
+assert avg == 74.9
+assert top == 95 and low == 49
+print("✅ ข้อ 1 ผ่าน")</code></pre></div>
+    <label class="check"><input type="checkbox"> รันแล้วเห็น ✅ ข้อ 1 ผ่าน</label>
+  </section>
+
+  <section class="task" data-task="2">
+    <div class="task-head"><h3>ข้อ 2 นับคนที่สอบผ่าน</h3><span class="who">ลองเองในห้อง</span></div>
+    <p>ผ่านคือได้ 50 คะแนนขึ้นไป ให้นับว่ามีกี่คน</p>
+<div class="code"><pre><code>passed = 0
+for s in scores:
+    # TODO: ถ้า s ได้ 50 ขึ้นไป ให้เพิ่ม passed ทีละ 1
+    pass
+
+print("ผ่าน", passed, "คน")
+assert passed == 9, "ยังไม่ถูก ลองเช็คเงื่อนไขอีกที"
+print("✅ ข้อ 2 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ใช้ <code>if s &gt;= 50:</code> แล้วข้างในเขียน <code>passed += 1</code> แทนบรรทัด <code>pass</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ใน Colab เปลี่ยนคะแนน <code>49</code> เป็น <code>50</code> แล้ว<b>ทายก่อนรัน</b>ว่า <code>passed</code> จะเป็นเท่าไร รันดูว่าตรงไหม แล้วเปลี่ยนกลับเป็น 49 (ถ้าไม่เปลี่ยนกลับ assert จะไม่ผ่าน ซึ่งก็พิสูจน์ว่า assert ทำงานจริง)</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify ข้อ 2 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="3">
+    <div class="task-head"><h3>ข้อ 3 ฟังก์ชันตัดเกรด</h3><span class="who">ทำเอง</span></div>
+    <p>80 ขึ้นไปได้ 4, 70 ขึ้นไปได้ 3, 60 ขึ้นไปได้ 2, 50 ขึ้นไปได้ 1, ต่ำกว่า 50 ได้ 0</p>
+<div class="code"><pre><code>def grade(score):
+    # TODO: เขียน if / elif / else ให้คืนค่าเกรดตามเกณฑ์
+    return 0
+
+assert grade(85) == 4
+assert grade(80) == 4
+assert grade(70) == 3
+assert grade(64) == 2
+assert grade(50) == 1
+assert grade(49) == 0
+print("✅ ข้อ 3 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>เช็คจากเกรดสูงลงต่ำ <code>if score &gt;= 80: return 4</code> แล้วต่อด้วย <code>elif score &gt;= 70: return 3</code> ไปเรื่อย ๆ ถ้าเช็คจากต่ำขึ้นสูง คน 85 คะแนนจะได้เกรด 1</div></details>
+    <div class="verify"><b>Human Verify:</b> เพิ่ม assert ของตัวเองอีก 2 บรรทัด ที่ขอบเกรดพอดี เช่น <code>assert grade(79) == 3</code> และ <code>assert grade(60) == 2</code> แล้วตอบใน AI Log ว่าถ้าสลับให้เช็คเกรดต่ำก่อน คน 85 คะแนนจะได้เกรดอะไร เพราะอะไร</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify ข้อ 3 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="4">
+    <div class="task-head"><h3>ข้อ 4 นับจำนวนคนในแต่ละเกรด</h3><span class="who">ทำเอง</span></div>
+    <p>ใช้ dict เก็บว่าเกรดไหนมีกี่คน เช่น <code>{4: 4, 3: 3, ...}</code></p>
+<div class="code"><pre><code>counts = {}
+for s in scores:
+    g = grade(s)
+    # TODO: ถ้า g ยังไม่มีใน counts ให้เริ่มที่ 1 ถ้ามีแล้วให้บวกเพิ่ม 1
+
+print(counts)
+assert counts == {4: 4, 3: 3, 2: 1, 1: 1, 0: 1}
+print("✅ ข้อ 4 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>แบบยาว: <code>if g in counts:</code> บวก 1 ไม่งั้นตั้งเป็น 1 &nbsp;แบบสั้น: <code>counts[g] = counts.get(g, 0) + 1</code></div></details>
+    <div class="verify"><b>Human Verify:</b> อธิบายใน AI Log ว่าบรรทัดที่นับเกรดทำงานยังไงตอนเจอเกรดนั้นครั้งแรก กับครั้งที่สอง ถ้า AI ใช้ <code>counts.get(g, 0)</code> ให้บอกด้วยว่าเลข 0 มีไว้ทำไม</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify ข้อ 4 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="5">
+    <div class="task-head"><h3>ข้อ 5 ข้อมูลเป็นแถว: ใครได้คะแนนสูงสุด</h3><span class="who">ทำเอง</span></div>
+    <p>ข้อมูลจริงมักมาเป็นแถว แต่ละแถวมีหลายช่อง เราเก็บเป็น list ของ dict ให้หาคนคะแนนสูงสุด และรายชื่อคนที่ได้เกรด 4</p>
+<div class="code"><pre><code>students = [
+    {"name": "ต้น", "score": 72},
+    {"name": "ฝน", "score": 85},
+    {"name": "เบียร์", "score": 64},
+    {"name": "มิว", "score": 91},
+    {"name": "โอ๊ต", "score": 58},
+    {"name": "แพร", "score": 77},
+    {"name": "บอส", "score": 88},
+    {"name": "จูน", "score": 49},
+    {"name": "ปาล์ม", "score": 95},
+    {"name": "น้ำ", "score": 70},
+]
+
+best = students[0]
+for st in students:
+    # TODO: ถ้าคะแนนของ st มากกว่าคะแนนของ best ให้ best = st
+    pass
+
+top4 = []
+# TODO: วนลูป students แล้วเก็บชื่อคนที่ได้เกรด 4 ลงใน top4
+
+print("คะแนนสูงสุด:", best["name"], best["score"])
+print("ได้เกรด 4:", top4)
+assert best["name"] == "ปาล์ม"
+assert top4 == ["ฝน", "มิว", "บอส", "ปาล์ม"]
+print("✅ ข้อ 5 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>อ่านคะแนนด้วย <code>st["score"]</code> &nbsp;ข้อเกรด 4 ใช้ฟังก์ชันจากข้อ 3: <code>if grade(st["score"]) == 4:</code> แล้ว <code>top4.append(st["name"])</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ถ้ามีคนได้ 95 เท่าปาล์ม 2 คน โค้ดของเราจะเลือกใครเป็น <code>best</code> <b>ทายก่อน</b> แล้วลองเพิ่ม <code>{"name": "ทดสอบ", "score": 95}</code> ไว้ท้าย list ใน cell แยก ดูว่าทายถูกไหม</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify ข้อ 5 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="6">
+    <div class="task-head"><h3>ข้อ 6 อ่านไฟล์ CSV แล้วหาค่าเฉลี่ยแต่ละห้อง</h3><span class="who">ทำเอง</span></div>
+    <p>ข้อนี้ใช้ 2 cell &nbsp;cell แรกสร้างไฟล์ <code>scores.csv</code> ใน Colab (บรรทัด <code>%%writefile</code> ต้องอยู่บรรทัดแรกสุดของ cell)</p>
+<div class="code"><pre><code>%%writefile scores.csv
+name,room,score
+ต้น,A,72
+ฝน,A,85
+เบียร์,A,64
+มิว,A,91
+โอ๊ต,A,58
+แพร,B,77
+บอส,B,88
+จูน,B,49
+ปาล์ม,B,95
+น้ำ,B,70</code></pre></div>
+    <p>cell ที่สอง อ่านไฟล์ทีละแถว เก็บคะแนนแยกห้อง แล้วหาค่าเฉลี่ย</p>
+<div class="code"><pre><code>import csv
+
+rooms = {}
+with open("scores.csv", encoding="utf-8") as f:
+    for row in csv.DictReader(f):
+        score = int(row["score"])   # ข้อมูลจาก CSV เป็นข้อความเสมอ ต้องแปลงเป็นตัวเลขก่อน
+        # TODO: เก็บ score ลง list ของห้องนั้น เช่น rooms["A"] = [72, 85, ...]
+
+room_avg = {}
+# TODO: วนลูป rooms แล้วหาค่าเฉลี่ยของแต่ละห้อง เก็บใน room_avg
+
+print(rooms)
+print(room_avg)
+assert room_avg == {"A": 74.0, "B": 75.8}
+print("✅ ข้อ 6 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>เก็บคะแนน: <code>rooms.setdefault(row["room"], []).append(score)</code><br>หาค่าเฉลี่ย: <code>for r, lst in rooms.items():</code> แล้ว <code>room_avg[r] = sum(lst) / len(lst)</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ใน cell ใหม่ ลองลบ <code>int(...)</code> ออกให้เหลือ <code>score = row["score"]</code> <b>ทายก่อน</b>ว่าจะเกิดอะไรขึ้นตอนหาค่าเฉลี่ย แล้วรันดู อธิบายใน AI Log ว่าทำไมข้อมูลจาก CSV ต้องแปลงเป็นตัวเลขก่อน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify ข้อ 6 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>ข้อท้าทาย กราฟดาวนับเกรด</h3><span class="who">ไม่บังคับ</span></div>
+    <p>วาดกราฟด้วยตัวอักษรจาก <code>counts</code> ข้อ 4 แล้วลองแก้ให้แสดงจำนวนคนต่อท้ายด้วย เช่น <code>4 ★★★★ (4 คน)</code></p>
+<div class="code"><pre><code>for g in [4, 3, 2, 1, 0]:
+    print(g, "★" * counts.get(g, 0))</code></pre></div>
+  </section>
+
+  <h2>Exit Ticket</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบ 3 ข้อนี้สั้น ๆ</p>
+  <ol class="steps">
+    <li>ข้อไหนยากที่สุด ติดตรงไหน แล้วแก้ได้ยังไง</li>
+    <li>ถ้าข้อมูลมี 10,000 แถว และมี 20 คอลัมน์ วิธีที่เราใช้วันนี้จะลำบากตรงไหน</li>
+    <li>มีครั้งไหนไหมที่ AI ให้โค้ดผิด หรือให้โค้ดที่เราอธิบายไม่ได้ เราจับได้จากอะไร</li>
+  </ol>
+  <div class="note">ข้อ 2 และ 3 ไม่มีคำตอบผิด คิดไว้ก่อน เพราะบทเรียนถัดไปเราจะเจอเครื่องมือที่ทำงานพวกนี้ได้ในบรรทัดเดียว</div>
+
+  <h2>ส่งงาน</h2>
+  <ol class="steps">
+    <li>กด <b>Runtime › Restart and run all</b> ให้ทุก cell รันผ่านจากบนลงล่าง</li>
+    <li>กด <b>Share</b> มุมขวาบน เปลี่ยนเป็น <b>Anyone with the link</b> สิทธิ์ <b>Viewer</b></li>
+    <li>กด <b>Copy link</b> แล้วส่งทางช่องทางส่งงานของห้อง</li>
+  </ol>
+</main>
+
+<script>
+// ปุ่มคัดลอกโค้ด
+document.querySelectorAll('.code').forEach(box => {
+  const btn = document.createElement('button');
+  btn.className = 'copy'; btn.type = 'button'; btn.textContent = 'คัดลอก';
+  btn.addEventListener('click', async () => {
+    const text = box.querySelector('code').innerText;
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) {
+      const ta = document.createElement('textarea'); ta.value = text;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    }
+    btn.textContent = 'คัดลอกแล้ว'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'คัดลอก'; btn.classList.remove('ok'); }, 1500);
+  });
+  box.appendChild(btn);
+});
+
+// ติ๊กข้อที่ผ่าน (จำไว้ในเครื่องนี้)
+const KEY = 'ds-s0-passed';
+let saved = [];
+try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { saved = []; }
+const tasks = [...document.querySelectorAll('.task[data-task]:not([data-task="bonus"])')];
+function update() {
+  const done = tasks.filter(t => t.querySelector('input').checked);
+  tasks.forEach(t => t.classList.toggle('passed', t.querySelector('input').checked));
+  document.getElementById('count').textContent = `ผ่าน ${done.length}/${tasks.length} ข้อ`;
+  document.getElementById('meter').style.width = (done.length / tasks.length * 100) + '%';
+  try { localStorage.setItem(KEY, JSON.stringify(done.map(t => t.dataset.task))); } catch (e) {}
+}
+tasks.forEach(t => {
+  const cb = t.querySelector('input');
+  cb.checked = saved.includes(t.dataset.task);
+  cb.addEventListener('change', update);
+});
+update();
+</script>
+</body>
+</html>
