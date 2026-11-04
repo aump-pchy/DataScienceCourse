@@ -13,7 +13,7 @@
 <div class="bar"><div class="bar-in">
   <a href="index.html">← หน้าวิชา</a>
   <div class="meter" aria-hidden="true"><i id="meter"></i></div>
-  <span class="count" id="count">ผ่าน 0/6 ข้อ</span>
+  <span class="count" id="count">ผ่าน 0/11 ข้อ</span>
 </div></div>
 
 <main>
@@ -83,7 +83,7 @@
 
   <div class="box">
     <h3>สิ่งที่ต้องส่ง</h3>
-    <p style="margin:0">ลิงก์ notebook ชื่อ <code>S0_ชื่อเล่น_เลขที่</code> ที่รันผ่านครบ 6 ข้อ มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket ท้ายไฟล์ ส่งทางช่องทางส่งงานของห้อง</p>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>S0_ชื่อเล่น_เลขที่</code> ที่รันผ่านครบ 6 ข้อ ทำ Mission ให้ได้ไกลที่สุด มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket ท้ายไฟล์ ส่งทางช่องทางส่งงานของห้อง</p>
   </div>
 
   <h2>เริ่มที่นี่: เปิด Colab</h2>
@@ -246,10 +246,137 @@ print("✅ ข้อ 6 ผ่าน")</code></pre></div>
     print(g, "★" * counts.get(g, 0))</code></pre></div>
   </section>
 
+
+  <h2>Mission: ร้านชาไทยสรุปยอดขายประจำสัปดาห์</h2>
+  <p>กลับมาที่ร้านชาไทยจาก <a href="w1.html">Week 1</a> แต่รอบนี้เจ้าของร้านจดออเดอร์ไว้ทั้งสัปดาห์ แล้วอยากรู้ว่าขายได้เท่าไร วันไหนขายดี เมนูไหนควรเก็บไว้ และถ้าขึ้นราคาจะได้เพิ่มเท่าไร</p>
+  <div class="note tip"><b>ยิ่ง Level สูง ตัวช่วยยิ่งน้อย</b> Level 1–2 มีโครงโค้ดให้ ส่วน Level 3–4 มีให้แค่ assert และ Level 5 ไม่มีอะไรให้เลย ทุก Level ต้องเขียนเป็นฟังก์ชัน เพราะ Level 5 จะเอาฟังก์ชันพวกนี้กลับมาใช้ซ้ำ</div>
+
+  <h3 style="margin-top:20px">ข้อมูลของร้าน</h3>
+  <p>วาง cell นี้ก่อนแล้วรันหนึ่งครั้ง ทุก Level ใช้ <code>prices</code> กับ <code>orders</code> ชุดนี้ <b>ห้ามแก้ข้อมูลใน cell นี้</b></p>
+<div class="code"><pre><code>prices = {"ชาไทย": 25, "ชาเขียว": 30, "โกโก้": 30, "นมชมพู": 20}
+
+orders = [
+    {"day": "จันทร์", "menu": "ชาไทย", "qty": 8},
+    {"day": "จันทร์", "menu": "โกโก้", "qty": 4},
+    {"day": "จันทร์", "menu": "นมชมพู", "qty": 5},
+    {"day": "อังคาร", "menu": "ชาไทย", "qty": 10},
+    {"day": "อังคาร", "menu": "ชาเขียว", "qty": 6},
+    {"day": "อังคาร", "menu": "โกโก้", "qty": 3},
+    {"day": "พุธ", "menu": "ชาไทย", "qty": 6},
+    {"day": "พุธ", "menu": "นมชมพู", "qty": 7},
+    {"day": "พุธ", "menu": "ชาเขียว", "qty": 2},
+    {"day": "พฤหัสบดี", "menu": "ชาไทย", "qty": 12},
+    {"day": "พฤหัสบดี", "menu": "โกโก้", "qty": 5},
+    {"day": "พฤหัสบดี", "menu": "ชาเขียว", "qty": 4},
+    {"day": "พฤหัสบดี", "menu": "นมชมพู", "qty": 3},
+    {"day": "ศุกร์", "menu": "ชาไทย", "qty": 9},
+    {"day": "ศุกร์", "menu": "ชาเขียว", "qty": 5},
+    {"day": "ศุกร์", "menu": "โกโก้", "qty": 6},
+]
+print("มีออเดอร์ทั้งหมด", len(orders), "รายการ")</code></pre></div>
+
+  <section class="task" data-task="m1">
+    <div class="task-head"><h3>Level 1 คิดเงินออเดอร์เดียว</h3><span class="who">มีโครงให้</span></div>
+    <p>สร้างฟังก์ชัน <code>order_total(order, prices)</code> รับออเดอร์ 1 รายการกับตารางราคา แล้วคืนค่าเงินของออเดอร์นั้น</p>
+<div class="code"><pre><code>def order_total(order, prices):
+    # TODO: หาราคาของเมนูจาก prices แล้วคูณกับจำนวนแก้ว
+    return 0
+
+assert order_total(orders[0], prices) == 200
+assert order_total({"day": "เสาร์", "menu": "โกโก้", "qty": 2}, prices) == 60
+print("✅ Level 1 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ชื่อเมนูอยู่ที่ <code>order["menu"]</code> เอาไปเปิดหาราคาใน dict ได้ด้วย <code>prices[...]</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ลองเรียก <code>order_total({"day": "เสาร์", "menu": "ชามะนาว", "qty": 1}, prices)</code> <b>ทายก่อน</b>ว่าจะเกิดอะไรขึ้น แล้วจด error ที่เห็นไว้ใน AI Log จะได้ใช้ใน Bonus</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 1 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="m2">
+    <div class="task-head"><h3>Level 2 รายได้ทั้งสัปดาห์</h3><span class="who">มีโครงให้</span></div>
+    <p>สร้างฟังก์ชัน <code>week_total(orders, prices)</code> คืนค่ารายได้รวมทุกออเดอร์ <b>ต้องเรียกใช้ <code>order_total</code> จาก Level 1</b></p>
+<div class="code"><pre><code>def week_total(orders, prices):
+    total = 0
+    # TODO: วนลูปทุกออเดอร์ แล้วบวกเงินของแต่ละออเดอร์เข้า total
+    return total
+
+print("รายได้ทั้งสัปดาห์:", week_total(orders, prices), "บาท")
+assert week_total(orders, prices) == 2475
+print("✅ Level 2 ผ่าน")</code></pre></div>
+    <div class="verify"><b>Human Verify:</b> <code>orders[:-1]</code> คือออเดอร์ทั้งหมดยกเว้นรายการสุดท้าย <b>ทายก่อน</b>ว่า <code>week_total(orders[:-1], prices)</code> จะน้อยลงกว่าเดิมเท่าไร โดยดูจากออเดอร์สุดท้ายใน cell ข้อมูล แล้วรันเช็ค</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 2 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="m3">
+    <div class="task-head"><h3>Level 3 รายได้แต่ละวัน และวันไหนถึงเป้า</h3><span class="who">มีแค่ assert</span></div>
+    <p>สร้างฟังก์ชัน <code>day_totals(orders, prices)</code> คืนค่า dict รายได้แยกตามวัน แล้วสร้าง list <code>hit_days</code> เก็บชื่อวันที่มีรายได้ถึงเป้า 500 บาทขึ้นไป</p>
+<div class="code"><pre><code># เขียนฟังก์ชัน day_totals และสร้าง hit_days เอง
+
+days = day_totals(orders, prices)
+print(days)
+print("วันที่ถึงเป้า:", hit_days)
+assert days == {"จันทร์": 420, "อังคาร": 520, "พุธ": 350, "พฤหัสบดี": 630, "ศุกร์": 555}
+assert hit_days == ["อังคาร", "พฤหัสบดี", "ศุกร์"]
+print("✅ Level 3 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>วิธีสะสมค่าใน dict เหมือนข้อ 4 ที่นับเกรด แต่รอบนี้บวกด้วยเงินของออเดอร์ ไม่ใช่บวกทีละ 1 ส่วน <code>hit_days</code> วนลูป <code>days.items()</code> แล้วใช้ if</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>คิดมือ</b>รายได้วันจันทร์ลงใน AI Log ก่อนรัน ว่าแต่ละออเดอร์ได้เท่าไร แล้วรวมเป็นเท่าไร จากนั้นเทียบกับผลจากโค้ด</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 3 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="m4">
+    <div class="task-head"><h3>Level 4 เมนูขายดี และเมนูขายน้อยสุด</h3><span class="who">มีแค่ assert</span></div>
+    <p>สร้างฟังก์ชัน <code>count_cups(orders)</code> คืนค่า dict จำนวนแก้วรวมของแต่ละเมนู แล้วหา <code>best</code> คือชื่อเมนูที่ขายได้มากที่สุด และ <code>worst</code> คือชื่อเมนูที่ขายได้น้อยที่สุด (นับเป็นจำนวนแก้ว)</p>
+<div class="code"><pre><code># เขียนฟังก์ชัน count_cups และหา best, worst เอง
+
+cups = count_cups(orders)
+print(cups)
+print("ขายดีที่สุด:", best, "/ ขายน้อยที่สุด:", worst)
+assert cups == {"ชาไทย": 45, "โกโก้": 18, "นมชมพู": 15, "ชาเขียว": 17}
+assert best == "ชาไทย" and worst == "นมชมพู"
+print("✅ Level 4 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>หาเมนูขายดีใช้หลักเดียวกับข้อ 5 ที่หาคนคะแนนสูงสุด คือจำตัวที่ดีที่สุดไว้ แล้ววนเทียบทีละตัว</div></details>
+    <div class="verify"><b>Human Verify:</b> ถ้ามี 2 เมนูขายได้จำนวนแก้วเท่ากันพอดี โค้ดของเราจะเลือกเมนูไหนเป็น <code>best</code> <b>ทายก่อน</b> แล้วลองทดสอบใน cell แยก ตอบใน AI Log ด้วยว่าถ้าเกิดเรื่องนี้จริง ควรรายงานเจ้าของร้านว่ายังไง</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 4 แล้ว</label>
+  </section>
+
+  <section class="task" data-task="m5">
+    <div class="task-head"><h3>Level 5 Boss: ตอบคำถามเจ้าของร้าน</h3><span class="who">ไม่มีโค้ดตั้งต้น</span></div>
+    <p>เจ้าของร้านมีคำถาม 2 ข้อ ให้ตอบโดย<b>เรียกใช้ฟังก์ชันจาก Level 1–4</b> ห้ามคิดเลขมือแล้วพิมพ์ตัวเลขใส่</p>
+    <ol class="steps">
+      <li>ถ้าสัปดาห์นี้ชาไทยขายแก้วละ 30 บาทแทน 25 บาท และขายได้จำนวนแก้วเท่าเดิม รายได้ทั้งสัปดาห์จะเพิ่มขึ้นเท่าไร</li>
+      <li>ถ้าร้านเลิกขายเมนูที่ขายน้อยที่สุด (จาก Level 4) รายได้ทั้งสัปดาห์จะหายไปเท่าไร</li>
+    </ol>
+    <p>ข้อนี้ไม่มี assert ให้ ต้องพิสูจน์คำตอบเอง</p>
+    <details><summary>คำใบ้</summary><div>ข้อ 1: สร้างตารางราคาชุดใหม่ด้วย <code>new_prices = dict(prices)</code> แล้วแก้ราคาชาไทยในชุดใหม่ ส่วน <code>prices</code> เดิมห้ามแก้ จากนั้นเรียก <code>week_total</code> กับราคา 2 ชุดแล้วลบกัน<br>ข้อ 2: สร้าง list ออเดอร์ใหม่ที่ไม่มีเมนู <code>worst</code> แล้วส่งเข้า <code>week_total</code></div></details>
+    <div class="verify"><b>Human Verify:</b> พิสูจน์คำตอบแต่ละข้อ<b>อีก 1 วิธีที่ต่างจากเดิม</b> เช่น ใช้จำนวนแก้วจาก Level 4 คูณกับส่วนต่างราคา แล้วดูว่าได้ตัวเลขเดียวกันไหม จากนั้นเพิ่ม Text cell เขียนคำตอบเป็นประโยคที่เจ้าของร้านอ่านเข้าใจ เช่น "ถ้าขึ้นราคาชาไทย สัปดาห์นี้จะได้เงินเพิ่ม ... บาท"</div>
+    <label class="check"><input type="checkbox"> ตอบครบ 2 ข้อ พิสูจน์ด้วยวิธีที่สองแล้ว และเขียนคำตอบให้เจ้าของร้านแล้ว</label>
+  </section>
+
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>Bonus ข้อมูลสกปรก</h3><span class="who">ไม่บังคับ</span></div>
+    <p>ข้อมูลจริงมักไม่สะอาด วันศุกร์มีคนจดออเดอร์เพิ่มมา 3 รายการ แต่มีปัญหาปนอยู่ ให้เขียนฟังก์ชัน <code>clean_week_total(orders, prices)</code> ที่คืนค่า 2 อย่างคือ รายได้รวม และจำนวนออเดอร์ที่ถูกข้าม ตามกติกานี้</p>
+    <ol class="steps">
+      <li>เมนูที่ไม่มีใน <code>prices</code> ให้ข้าม</li>
+      <li><code>qty</code> ที่เป็นข้อความ เช่น <code>"2"</code> ให้แปลงเป็นตัวเลขแล้วนับตามปกติ</li>
+      <li><code>qty</code> ที่เป็น 0 หรือติดลบ ให้ข้าม</li>
+    </ol>
+<div class="code"><pre><code>dirty_orders = orders + [
+    {"day": "ศุกร์", "menu": "ชามะนาว", "qty": 3},
+    {"day": "ศุกร์", "menu": "โกโก้", "qty": "2"},
+    {"day": "ศุกร์", "menu": "ชาไทย", "qty": -1},
+]
+
+# เขียนฟังก์ชัน clean_week_total เอง ให้ return total, skipped
+
+total, skipped = clean_week_total(dirty_orders, prices)
+print("รายได้:", total, "ข้ามไป:", skipped, "รายการ")
+assert total == 2535 and skipped == 2
+print("✅ Bonus ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>เช็คว่าเมนูมีราคาไหมด้วย <code>order["menu"] in prices</code> และเช็คว่าเป็นข้อความไหมด้วย <code>type(qty) == str</code></div></details>
+  </section>
+
   <h2>Exit Ticket</h2>
   <p>เพิ่ม Text cell ท้าย notebook แล้วตอบ 3 ข้อนี้สั้น ๆ</p>
   <ol class="steps">
-    <li>ข้อไหนยากที่สุด ติดตรงไหน แล้วแก้ได้ยังไง</li>
+    <li>ข้อหรือ Level ไหนยากที่สุด ติดตรงไหน แล้วแก้ได้ยังไง</li>
     <li>ถ้าข้อมูลมี 10,000 แถว และมี 20 คอลัมน์ วิธีที่เราใช้วันนี้จะลำบากตรงไหน</li>
     <li>มีครั้งไหนไหมที่ AI ให้โค้ดผิด หรือให้โค้ดที่เราอธิบายไม่ได้ เราจับได้จากอะไร</li>
   </ol>
