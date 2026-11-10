@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C1 NumPy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-key="ds-c1-passed">
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/10 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">C1 &nbsp;ต่อจาก S0 Colab Starter</p>
+    <h1>NumPy: คำนวณทั้งชุดในบรรทัดเดียว</h1>
+    <p>ใน S0 เราเขียนลูปหลายบรรทัดเพื่อนับคนสอบผ่าน หาค่าเฉลี่ย และหาคนคะแนนสูงสุด รอบนี้เราจะทำเรื่องเดิมด้วย NumPy ซึ่งเป็นเครื่องมือที่ Pandas และ Machine Learning ใช้อยู่ข้างใต้ทั้งหมด</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทำบทนี้เสร็จแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>สร้าง array และบอกขนาดของข้อมูลด้วย <code>shape</code> ได้</li>
+    <li>คำนวณกับข้อมูลทั้งชุดโดยไม่ต้องเขียนลูป</li>
+    <li>หาค่าสถิติพื้นฐาน และหาว่าใครหรืออะไรได้ค่าสูงสุดด้วย <code>argmax</code></li>
+    <li>กรองข้อมูลตามเงื่อนไขด้วย boolean indexing</li>
+    <li>สรุปข้อมูลแบบตาราง แยกรายแถวหรือรายคอลัมน์ด้วย <code>axis</code></li>
+    <li>ใช้ Gen AI เขียนโค้ด NumPy แล้วตรวจเองได้ว่าผลถูกจริง</li>
+  </ul>
+
+  <h2>ใช้ AI ในบทนี้: AI Work, Human Verify</h2>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอกโจทย์ ข้อมูล และผลที่ต้องได้ให้ชัด</li>
+        <li>สั่งให้แก้เฉพาะ <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>บทนี้สั่งเพิ่มอีกข้อ: <b>ห้ามใช้ for loop</b> ให้ใช้ NumPy</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยไม่แตะ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดตัวเอง</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจในกรอบเส้นประ และทายผลก่อนรัน</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">ข้อไหนใช้ AI ให้เขียน <b>AI Log</b> ใต้ข้อนั้น ว่าถามอะไร และตรวจด้วยวิธีไหน เหมือนใน S0</div>
+
+  <div class="box">
+    <h3>สิ่งที่ต้องส่ง</h3>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>C1_ชื่อเล่น_เลขที่</code> ที่ Part A–E รันผ่าน ทำ Mission ให้ได้ไกลที่สุด มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket ท้ายไฟล์</p>
+  </div>
+
+  <h2>เปิดคาบ: ลูปแข่งกับ NumPy</h2>
+  <p>cell แรก นับคนสอบผ่านจากข้อมูล 10 คนเหมือน S0 ข้อ 2 แล้วเทียบกับวิธี NumPy</p>
+<div class="code"><pre><code>import numpy as np
+
+scores_list = [72, 85, 64, 91, 58, 77, 88, 49, 95, 70]
+
+# แบบ S0: ใช้ลูป
+passed = 0
+for s in scores_list:
+    if s &gt;= 50:
+        passed += 1
+print("แบบลูป:", passed)
+
+# แบบ NumPy: บรรทัดเดียว
+scores = np.array(scores_list)
+print("แบบ NumPy:", (scores &gt;= 50).sum())</code></pre></div>
+  <p>ทีนี้ลองข้อมูล 1,000,000 คน แยกเป็น 3 cell แล้วดูเวลาที่ Colab แสดงใต้ cell (<code>%%time</code> ต้องอยู่บรรทัดแรกของ cell)</p>
+<div class="code"><pre><code>big = np.random.randint(0, 101, 1_000_000)   # สุ่มคะแนน 0-100 จำนวน 1 ล้านคน
+big_list = big.tolist()</code></pre></div>
+<div class="code"><pre><code>%%time
+passed = 0
+for s in big_list:
+    if s &gt;= 50:
+        passed += 1
+print(passed)</code></pre></div>
+<div class="code"><pre><code>%%time
+print((big &gt;= 50).sum())</code></pre></div>
+  <div class="note tip">ดูช่อง <b>Wall time</b> ของสอง cell แล้วจดลง Text cell ว่า NumPy เร็วกว่ากี่เท่า ตัวเลขของแต่ละคนจะไม่เท่ากันก็ไม่เป็นไร</div>
+
+  <h2>ข้อมูลที่ใช้ใน Part A–D</h2>
+  <p>คะแนนชุดเดิมจาก S0 รันก่อนหนึ่งครั้ง</p>
+<div class="code"><pre><code>import numpy as np
+
+names  = np.array(["ต้น", "ฝน", "เบียร์", "มิว", "โอ๊ต", "แพร", "บอส", "จูน", "ปาล์ม", "น้ำ"])
+scores = np.array([72, 85, 64, 91, 58, 77, 88, 49, 95, 70])   # กลางภาค
+final  = np.array([80, 90, 70, 95, 60, 75, 85, 55, 100, 65])  # ปลายภาค</code></pre></div>
+  <section class="task" data-task="a">
+    <div class="task-head"><h3>Part A array, shape และการดึงข้อมูล</h3><span class="who">ทำตามครู</span></div>
+    <p>array หน้าตาคล้าย list แต่ทุกช่องเป็นข้อมูลชนิดเดียวกัน และคำนวณทั้งชุดได้ <code>shape</code> บอกว่าข้อมูลมีขนาดเท่าไร</p>
+<div class="code"><pre><code>print(scores)
+print("shape:", scores.shape)   # (10,) แปลว่ามี 10 ช่อง 1 มิติ
+print("คนแรก:", scores[0], "คนสุดท้าย:", scores[-1])
+
+# TODO: ดึงคะแนน 3 คนแรก ด้วยการ slice แบบเดียวกับ list
+first3 = scores
+
+print(first3)
+assert scores.shape == (10,)
+assert list(first3) == [72, 85, 64]
+print("✅ Part A ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>slice ใช้รูปแบบ <code>scores[เริ่ม:จบ]</code> โดยไม่รวมตำแหน่งจบ</div></details>
+    <div class="verify"><b>Human Verify:</b> ใน cell ใหม่ <b>ทายก่อน</b>ว่า <code>[1, 2] * 2</code> กับ <code>np.array([1, 2]) * 2</code> ได้ผลอะไร แล้วรันดู จดใน Text cell ว่าต่างกันยังไง ข้อนี้คือจุดที่ AI กับคนเขียนโค้ดสับสนบ่อยที่สุดอย่างหนึ่ง</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part A แล้ว</label>
+  </section>
+  <section class="task" data-task="b">
+    <div class="task-head"><h3>Part B คำนวณทั้งชุด</h3><span class="who">ทำตามครู</span></div>
+    <p>บวก ลบ คูณ หาร กับ array ได้เลย NumPy จะทำให้ทุกช่องพร้อมกัน ไม่ต้องเขียนลูป</p>
+<div class="code"><pre><code># TODO: ครูใจดีให้คะแนนพิเศษทุกคน คนละ 5 คะแนน
+bonus = scores
+
+# TODO: คะแนนรวม = กลางภาค 40% + ปลายภาค 60%
+total = scores
+
+print(bonus)
+print(total)
+assert bonus.sum() == 799
+assert list(total.round(1)) == [76.8, 88.0, 67.6, 93.4, 59.2, 75.8, 86.2, 52.6, 98.0, 67.0]
+print("✅ Part B ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>40% คือคูณ 0.4 &nbsp;array สองตัวที่ยาวเท่ากันบวกกันได้เลย ช่องที่ 1 บวกช่องที่ 1 ช่องที่ 2 บวกช่องที่ 2 ไปเรื่อย ๆ</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>คิดมือ</b>คะแนนรวมของ "ต้น" ลงใน Text cell ก่อน (กลางภาค 72 ปลายภาค 80) แล้วเทียบกับ <code>total[0]</code> ถ้าเห็นตัวเลขแบบ <code>76.80000000000001</code> ให้หาคำตอบว่าทำไม <code>assert</code> ถึงใช้ <code>.round(1)</code></div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part B แล้ว</label>
+  </section>
+  <section class="task" data-task="c">
+    <div class="task-head"><h3>Part C สถิติพื้นฐาน และใครได้สูงสุด</h3><span class="who">ทำตามครู</span></div>
+    <p><code>argmax()</code> ไม่ได้ให้ค่าสูงสุด แต่ให้<b>ตำแหน่ง</b>ของค่าสูงสุด เอาตำแหน่งนั้นไปเปิดหาชื่อใน <code>names</code> ได้</p>
+<div class="code"><pre><code># TODO: เติมให้ครบทุกบรรทัด
+avg = 0          # ค่าเฉลี่ย  ใช้ scores.mean()
+mid = 0          # มัธยฐาน    ใช้ np.median(scores)
+spread = 0       # ส่วนเบี่ยงเบนมาตรฐาน ใช้ scores.std()
+top_name = ""    # ชื่อคนคะแนนสูงสุด
+
+print("เฉลี่ย", avg, "มัธยฐาน", mid, "SD", round(spread, 2))
+print("คะแนนสูงสุด:", top_name)
+assert avg == 74.9 and mid == 74.5
+assert round(spread, 2) == 14.31
+assert top_name == "ปาล์ม"
+print("✅ Part C ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ชื่อคนคะแนนสูงสุดคือ <code>names[scores.argmax()]</code> เทียบกับ S0 ข้อ 5 ที่ต้องเขียนลูปหลายบรรทัด</div></details>
+    <div class="verify"><b>Human Verify:</b> ถ้ามีนักเรียนขาดสอบได้ 0 คะแนนเพิ่มเข้ามาอีกคน <b>ทายก่อน</b>ว่าค่าเฉลี่ยหรือมัธยฐานจะเปลี่ยนมากกว่ากัน แล้วลองใน cell แยกด้วย <code>s2 = np.append(scores, 0)</code> ตอบใน Text cell ด้วยว่าถ้าจะรายงานคะแนน "ของคนทั่วไปในห้อง" ควรใช้ค่าไหน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part C แล้ว</label>
+  </section>
+  <section class="task" data-task="d">
+    <div class="task-head"><h3>Part D กรองข้อมูลด้วยเงื่อนไข</h3><span class="who">guided lab</span></div>
+    <p><code>scores &gt;= 50</code> จะได้ array ของ True/False แล้วเอาไปกรองข้อมูลได้ เรียกว่า <b>boolean indexing</b></p>
+<div class="code"><pre><code>print(scores &gt;= 50)   # ลองดูก่อนว่าได้อะไร
+
+# TODO: เติมให้ครบ ห้ามใช้ลูป
+passed_scores = scores                   # คะแนนของคนที่ผ่าน (50 ขึ้นไป)
+pass_count = 0                           # จำนวนคนที่ผ่าน
+pass_rate = 0                            # เปอร์เซ็นต์คนผ่าน
+grade4_names = names                     # ชื่อคนที่ได้ 80 ขึ้นไป
+labels = names                           # "ผ่าน" หรือ "ไม่ผ่าน" ของทุกคน ใช้ np.where
+
+print(passed_scores, pass_count, pass_rate)
+print(grade4_names)
+print(labels)
+assert len(passed_scores) == 9 and pass_count == 9
+assert pass_rate == 90.0
+assert list(grade4_names) == ["ฝน", "มิว", "บอส", "ปาล์ม"]
+assert labels[7] == "ไม่ผ่าน" and labels[0] == "ผ่าน"
+print("✅ Part D ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>กรองด้วย <code>scores[scores &gt;= 50]</code> &nbsp;True นับเป็น 1 เลยใช้ <code>.sum()</code> นับได้ &nbsp;ป้ายผ่าน/ไม่ผ่านใช้ <code>np.where(เงื่อนไข, "ผ่าน", "ไม่ผ่าน")</code></div></details>
+    <div class="verify"><b>Human Verify:</b> เทียบคำตอบกับ S0: <code>pass_count</code> ต้องตรงกับข้อ 2 และ <code>grade4_names</code> ต้องตรงกับข้อ 5 ถ้าได้เท่ากันแปลว่าพิสูจน์ด้วย 2 วิธีแล้ว จากนั้น<b>ทายก่อน</b>ว่า <code>names[scores &lt; 60]</code> จะได้ใครบ้าง</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part D แล้ว</label>
+  </section>
+  <section class="task" data-task="e">
+    <div class="task-head"><h3>Part E ตาราง 2 มิติ และ axis</h3><span class="who">guided lab</span></div>
+    <p>ข้อมูลจริงมักเป็นตาราง ตัวอย่างนี้คือคะแนน 10 คน (แถว) × 3 วิชา (คอลัมน์) &nbsp;<code>axis=0</code> คือสรุป<b>ลงตามแนวตั้ง</b>ได้ผลรายคอลัมน์ ส่วน <code>axis=1</code> คือสรุป<b>ตามแนวนอน</b>ได้ผลรายแถว</p>
+<div class="code"><pre><code>subjects = np.array(["คณิต", "อังกฤษ", "คอมพิวเตอร์"])
+table = np.array([
+    [72, 68, 80], [85, 90, 78], [64, 70, 58], [91, 88, 95], [58, 62, 55],
+    [77, 80, 74], [88, 85, 90], [49, 55, 60], [95, 92, 98], [70, 65, 72],
+])
+print("shape:", table.shape)
+
+# TODO: เติมให้ครบ
+per_student = table      # ค่าเฉลี่ยของแต่ละคน (ได้ 10 ค่า)
+per_subject = table      # ค่าเฉลี่ยของแต่ละวิชา (ได้ 3 ค่า)
+best_subject = ""        # วิชาที่ค่าเฉลี่ยสูงสุด
+
+print(per_student.round(1))
+print(per_subject.round(1))
+print("วิชาที่ทำได้ดีที่สุด:", best_subject)
+assert table.shape == (10, 3)
+assert list(per_student.round(1)) == [73.3, 84.3, 64.0, 91.3, 58.3, 77.0, 87.7, 54.7, 95.0, 69.0]
+assert list(per_subject.round(1)) == [74.9, 75.5, 76.0]
+assert best_subject == "คอมพิวเตอร์"
+print("✅ Part E ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>table.mean(axis=...)</code> &nbsp;ถ้าได้ 3 ค่าแต่อยากได้ 10 ค่า แปลว่าใช้ axis ผิดฝั่ง &nbsp;วิชาที่ดีที่สุดใช้ <code>argmax</code> กับ <code>subjects</code> แบบ Part C</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>ทายก่อนรัน</b>ว่า <code>table.mean(axis=0).shape</code> กับ <code>table.mean(axis=1).shape</code> ได้เท่าไร แล้วตอบใน Text cell ว่าถ้าจะหาคะแนนรวม 3 วิชาของแต่ละคน ต้องใช้ axis ไหน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part E แล้ว</label>
+  </section>
+
+  <h2>Mission: ร้านชาไทย 2 สัปดาห์ ด้วย NumPy</h2>
+  <p>ร้านชาไทยกลับมาอีกครั้ง รอบนี้เจ้าของร้านจดเป็นตาราง <b>14 วัน × 4 เมนู</b> ว่าแต่ละวันขายเมนูไหนได้กี่แก้ว งานที่ S0 ต้องใช้ฟังก์ชันหลายตัว รอบนี้ NumPy ทำได้ในไม่กี่บรรทัด</p>
+  <div class="note tip"><b>กติกา Mission: ห้ามใช้ for loop ทุก Level</b> และห้ามพิมพ์ตัวเลข 14 หรือ 4 ลงไปในโค้ดตรง ๆ ให้ใช้ <code>shape</code> แทน เพราะสัปดาห์หน้าร้านอาจมีเมนูหรือจำนวนวันเปลี่ยนไป</div>
+<div class="code"><pre><code>import numpy as np
+
+menus  = np.array(["ชาไทย", "ชาเขียว", "โกโก้", "นมชมพู"])
+prices = np.array([25, 30, 30, 20])
+target = 800      # เป้ารายได้ต่อวัน (บาท)
+
+# แต่ละแถว = 1 วัน (วันที่ 1-14) แต่ละคอลัมน์ = เมนูตามลำดับใน menus
+cups = np.array([
+    [12, 5, 6, 8], [15, 7, 5, 6], [10, 4, 8, 9], [18, 6, 7, 5], [20, 9, 10, 7],
+    [8, 3, 4, 6], [6, 2, 3, 4], [14, 6, 7, 7], [16, 8, 6, 5], [11, 5, 9, 8],
+    [19, 7, 8, 6], [24, 10, 11, 8], [9, 4, 5, 5], [7, 3, 2, 6],
+])
+days = np.arange(1, cups.shape[0] + 1)   # [1, 2, ..., 14]
+print("ตารางขนาด", cups.shape)</code></pre></div>
+  <section class="task" data-task="m1">
+    <div class="task-head"><h3>Level 1 ยอดแก้วรวมของแต่ละเมนู</h3><span class="who">มีโครงให้</span></div>
+<div class="code"><pre><code>menu_cups = cups   # TODO
+
+print(menus)
+print(menu_cups)
+assert list(menu_cups) == [189, 79, 91, 90]
+print("✅ Level 1 ผ่าน")</code></pre></div>
+    <div class="verify"><b>Human Verify:</b> ยอดชาไทย 189 แก้ว <b>บวกมือ</b>เฉพาะวันที่ 1–3 ในคอลัมน์แรกก่อน แล้วเทียบกับ <code>cups[:3, 0].sum()</code> อธิบายใน AI Log ว่า <code>[:3, 0]</code> แปลว่าอะไร</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 1 แล้ว</label>
+  </section>
+  <section class="task" data-task="m2">
+    <div class="task-head"><h3>Level 2 รายได้รายวัน</h3><span class="who">มีโครงให้</span></div>
+    <p>แต่ละวันต้องเอาจำนวนแก้วของทุกเมนูคูณราคาของเมนูนั้น แล้วรวมกัน</p>
+<div class="code"><pre><code>daily = cups   # TODO: ได้ 14 ค่า
+
+print(daily)
+assert list(daily) == [790, 855, 790, 940, 1210, 530, 380, 880, 920, 855, 1045, 1390, 595, 445]
+assert daily.sum() == 11625
+print("✅ Level 2 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>cups * prices</code> ได้ตารางเงินขนาด 14 × 4 เพราะ NumPy เอาราคา 4 ช่องไปคูณกับทุกแถวให้เอง แล้วค่อยรวมตามแนวนอน</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>คิดมือ</b>รายได้วันที่ 1 ก่อน (12 ชาไทย, 5 ชาเขียว, 6 โกโก้, 8 นมชมพู) แล้วเทียบกับ <code>daily[0]</code> จากนั้นดู <code>(cups * prices).shape</code> แล้วอธิบายใน AI Log ว่าทำไมตาราง 14 × 4 คูณกับ 4 ค่าได้</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 2 แล้ว</label>
+  </section>
+  <section class="task" data-task="m3">
+    <div class="task-head"><h3>Level 3 วันไหนถึงเป้า 800 บาท</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง: hit_days = วันที่รายได้ถึงเป้า, hit_count = จำนวนวันที่ถึงเป้า
+
+print("ถึงเป้า", hit_count, "วัน:", hit_days)
+assert list(hit_days) == [2, 4, 5, 8, 9, 10, 11, 12]
+assert hit_count == 8
+print("✅ Level 3 ผ่าน")</code></pre></div>
+    <div class="verify"><b>Human Verify:</b> วันที่ 1 กับวันที่ 3 ได้ 790 บาท ขาดเป้าไปแค่ 10 บาท ถ้าเจ้าของร้านลดเป้าเหลือ 790 <b>ทายก่อน</b>ว่า <code>hit_count</code> จะเป็นเท่าไร แล้วลองเปลี่ยน <code>target</code> ดู (อย่าลืมเปลี่ยนกลับ)</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 3 แล้ว</label>
+  </section>
+  <section class="task" data-task="m4">
+    <div class="task-head"><h3>Level 4 วันขายดีที่สุด และเมนูทำเงินที่สุด</h3><span class="who">มีแค่ assert</span></div>
+    <p>หา <code>best_day</code> คือวันที่รายได้สูงสุด และ <code>top_money_menu</code> คือเมนูที่<b>ทำเงิน</b>มากที่สุด แล้วหา <code>second_money_menu</code> คือเมนูที่ทำเงินเป็นอันดับ 2 ด้วย</p>
+<div class="code"><pre><code># เขียนเอง
+
+print("วันขายดี: วันที่", best_day)
+print("ทำเงินอันดับ 1:", top_money_menu, "อันดับ 2:", second_money_menu)
+assert best_day == 12
+assert top_money_menu == "ชาไทย"
+assert second_money_menu == "โกโก้"
+print("✅ Level 4 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>เงินต่อเมนู = จำนวนแก้วรวมจาก Level 1 คูณราคา &nbsp;อันดับ 2 ลองหาคำสั่ง <code>np.argsort</code></div></details>
+    <div class="verify"><b>Human Verify:</b> จาก Level 1 ชาเขียวขายได้ 79 แก้ว น้อยกว่านมชมพู 90 แก้ว แต่ใครทำเงินมากกว่ากัน <b>ทายก่อน</b> แล้วคำนวณดู ตอบใน AI Log ว่าเจ้าของร้านควรดู "จำนวนแก้ว" หรือ "เงิน" ตอนตัดสินใจเลิกขายเมนู</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 4 แล้ว</label>
+  </section>
+  <section class="task" data-task="m5">
+    <div class="task-head"><h3>Level 5 Boss: รายงานร้านในฟังก์ชันเดียว</h3><span class="who">ไม่มีโค้ดตั้งต้น</span></div>
+    <p>เขียนฟังก์ชัน <code>shop_report(cups, prices, menus, target)</code> คืนค่า dict ที่มี 4 key นี้ <b>ห้ามใช้ for loop</b></p>
+    <ul style="margin:6px 0 12px">
+      <li><code>"menu_cups"</code> จำนวนแก้วรวมของแต่ละเมนู</li>
+      <li><code>"total"</code> รายได้รวมทั้งหมด</li>
+      <li><code>"hit_count"</code> จำนวนวันที่ถึงเป้า</li>
+      <li><code>"best_menu"</code> ชื่อเมนูที่ขายได้กี่แก้วมากที่สุด</li>
+    </ul>
+<div class="code"><pre><code># เขียนฟังก์ชัน shop_report เอง
+
+report = shop_report(cups, prices, menus, target)
+print(report)
+assert list(report["menu_cups"]) == [189, 79, 91, 90]
+assert report["total"] == 11625 and report["hit_count"] == 8
+assert report["best_menu"] == "ชาไทย"
+print("✅ Level 5 ส่วนฟังก์ชันผ่าน")</code></pre></div>
+    <p>จากนั้นตอบคำถามเจ้าของร้าน: <b>สัปดาห์ที่ 2 (วันที่ 8–14) ขายได้มากหรือน้อยกว่าสัปดาห์ที่ 1 (วันที่ 1–7) กี่บาท คิดเป็นกี่เปอร์เซ็นต์</b> ข้อนี้ไม่มี assert ให้</p>
+    <details><summary>คำใบ้</summary><div>ตัดตารางทีละครึ่งด้วย <code>cups[:7]</code> และ <code>cups[7:]</code> แล้วส่งเข้า <code>shop_report</code> ได้เลย</div></details>
+    <div class="verify"><b>Human Verify:</b> ฟังก์ชันที่ดีต้องใช้ได้กับข้อมูลชุดอื่น ทดสอบด้วยตารางที่คิดมือได้ เช่น <code>shop_report(np.array([[1, 2], [3, 4]]), np.array([10, 20]), np.array(["ก", "ข"]), 60)</code> <b>คิดคำตอบก่อน</b>ทั้ง 4 ค่า แล้วรันเทียบ สุดท้ายพิสูจน์คำตอบเรื่องสัปดาห์ 1–2 อีกวิธี เช่น ใช้ <code>daily</code> จาก Level 2 แล้วเขียนคำตอบเป็นประโยคให้เจ้าของร้านอ่าน</div>
+    <label class="check"><input type="checkbox"> ฟังก์ชันผ่าน ทดสอบกับข้อมูลชุดเล็กแล้ว และตอบเรื่องสัปดาห์ 1–2 ให้เจ้าของร้านแล้ว</label>
+  </section>
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>Bonus ตัดเกรดทั้งห้องโดยไม่ใช้ลูป</h3><span class="who">ไม่บังคับ</span></div>
+    <p>ใน S0 ข้อ 3 เราเขียนฟังก์ชัน <code>grade()</code> แล้วต้องวนลูปเรียกทีละคน รอบนี้ให้ตัดเกรดทั้งห้องในคำสั่งเดียว เกณฑ์เดิม 80+ ได้ 4, 70+ ได้ 3, 60+ ได้ 2, 50+ ได้ 1</p>
+<div class="code"><pre><code># เขียนเอง: grades = เกรดของทุกคนใน scores
+
+print(grades)
+assert list(grades) == [3, 4, 2, 4, 1, 3, 4, 0, 4, 3]
+print("✅ Bonus ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ลองหาคำสั่ง <code>np.select</code> แล้วให้ AI อธิบายว่ารับอะไร 3 อย่าง</div></details>
+  </section>
+
+  <h2>Exit Ticket</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบสั้น ๆ</p>
+  <ol class="steps">
+    <li>เรื่องไหนที่ NumPy ทำได้ง่ายกว่าการเขียนลูปมากที่สุด ยกตัวอย่างจากบทนี้ 1 เรื่อง</li>
+    <li>ถ้าอยากเก็บชื่อนักเรียน ห้อง และคะแนน ไว้ในตารางเดียวกัน แล้วกรองว่าห้องไหนได้เท่าไร NumPy จะลำบากตรงไหน</li>
+    <li>Human Verify ข้อไหนที่ทายผิด และตอนนี้เข้าใจแล้วว่าผิดเพราะอะไร</li>
+  </ol>
+  <div class="note">ข้อ 2 ไม่มีคำตอบผิด เก็บไว้ก่อน เพราะบทหน้าเราจะเจอ Pandas ที่เกิดมาเพื่อแก้ปัญหานี้</div>
+
+  <h2>ส่งงาน</h2>
+  <ol class="steps">
+    <li>กด <b>Runtime › Restart and run all</b> ให้ทุก cell รันผ่านจากบนลงล่าง</li>
+    <li>กด <b>Share</b> เปลี่ยนเป็น <b>Anyone with the link</b> สิทธิ์ <b>Viewer</b></li>
+    <li>กด <b>Copy link</b> แล้วส่งทางช่องทางส่งงานของห้อง</li>
+  </ol>
+</main>
+
+<script src="lesson.js"></script>
+</body>
+</html>
