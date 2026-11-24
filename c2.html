@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C2 Pandas สำรวจข้อมูล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-key="ds-c2-passed">
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/10 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">C2 &nbsp;ต่อจาก C1 NumPy</p>
+    <h1>Pandas: สำรวจข้อมูลก่อนเชื่อข้อมูล</h1>
+    <p>ร้านชาไทยเปิดสาขาที่ 2 แล้ว เจ้าของร้านเลยให้พนักงานจดออเดอร์ทั้งเดือนพฤศจิกายนลงไฟล์ CSV มากกว่า 500 แถว งานของเราคือเปิดไฟล์นี้ สำรวจว่ามีอะไรอยู่ข้างใน ตอบคำถามเจ้าของร้าน และจับให้ได้ว่าข้อมูลตรงไหนเชื่อไม่ได้</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทำบทนี้เสร็จแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>โหลดไฟล์ CSV จาก URL เป็น DataFrame และบอกขนาดของข้อมูลได้</li>
+    <li>ใช้ <code>info</code>, <code>describe</code>, <code>isna</code> ตรวจว่าข้อมูลมีช่องว่างหรือชนิดข้อมูลผิดตรงไหน</li>
+    <li>นับข้อมูลแต่ละกลุ่มด้วย <code>value_counts</code></li>
+    <li>กรองข้อมูลด้วยหลายเงื่อนไข และเรียงลำดับด้วย <code>sort_values</code></li>
+    <li>เขียนรายการปัญหาในข้อมูลพร้อมหลักฐาน เพื่อใช้แก้ในบทถัดไป</li>
+    <li>ใช้ Gen AI เขียนโค้ด Pandas แล้วตรวจเองได้ว่าผลถูกจริง</li>
+  </ul>
+  <p class="sub" style="margin-top:12px">ทำไมต้องเรียน: ข้อมูลจริงเกือบทุกชุดเป็นตารางที่มีทั้งข้อความและตัวเลขปนกัน ซึ่ง NumPy จัดการลำบาก Pandas คือเครื่องมือหลักของงานนี้ และนักวิทยาศาสตร์ข้อมูลใช้เวลาส่วนใหญ่ไปกับการสำรวจและทำความสะอาดข้อมูล ก่อนจะได้ทำกราฟหรือโมเดล</p>
+
+  <h2>ใช้ AI ในบทนี้: AI Work, Human Verify</h2>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอกโจทย์ ข้อมูล และผลที่ต้องได้ให้ชัด</li>
+        <li>สั่งให้แก้เฉพาะ <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>บทนี้ให้บอก AI ด้วยว่าข้อมูลมีคอลัมน์อะไรบ้าง โดยวางผลของ <code>df.head()</code> ให้ AI ดู</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยไม่แตะ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดตัวเอง</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจในกรอบเส้นประ และทายผลก่อนรัน</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">ข้อไหนใช้ AI ให้เขียน <b>AI Log</b> ใต้ข้อนั้น ว่าถามอะไร และตรวจด้วยวิธีไหน</div>
+
+  <div class="box">
+    <h3>สิ่งที่ต้องส่ง</h3>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>C2_ชื่อเล่น_เลขที่</code> ที่ Part A–E รันผ่าน ทำ Mission ให้ได้ไกลที่สุด เขียนรายการปัญหาในข้อมูล (Boss) มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket</p>
+  </div>
+
+  <h2>เปิดคาบ: ตารางที่ NumPy ทำลำบาก</h2>
+  <p>Exit Ticket ของ C1 ถามว่าถ้าเก็บชื่อ ห้อง และคะแนนไว้ด้วยกัน NumPy จะลำบากตรงไหน ลองดูว่า Pandas ทำเรื่องเดียวกันยังไง</p>
+<div class="code"><pre><code>import pandas as pd
+
+students = pd.DataFrame({
+    "name":  ["ต้น", "ฝน", "เบียร์", "มิว", "โอ๊ต", "แพร", "บอส", "จูน", "ปาล์ม", "น้ำ"],
+    "room":  ["A", "A", "A", "A", "A", "B", "B", "B", "B", "B"],
+    "score": [72, 85, 64, 91, 58, 77, 88, 49, 95, 70],
+})
+print(students)
+print(students[students["room"] == "B"])          # เลือกเฉพาะห้อง B
+print(students[students["score"] &gt;= 80]["name"])  # ชื่อคนที่ได้ 80 ขึ้นไป</code></pre></div>
+  <div class="note tip">สังเกตว่า boolean indexing ใช้หลักเดียวกับ C1 แต่ตอนนี้เลือกทั้งแถวได้ และอ้างคอลัมน์ด้วยชื่อแทนตำแหน่ง</div>
+
+  <h2>ข้อมูลของร้าน</h2>
+  <p>cell นี้โหลดไฟล์ออเดอร์ทั้งเดือนจากเว็บของวิชา รันครั้งเดียวแล้วทุก Part ใช้ <code>df</code> ตัวนี้</p>
+<div class="code"><pre><code>import pandas as pd
+
+url = "{{DATA}}/orders_raw.csv"
+df = pd.read_csv(url)
+print("โหลดสำเร็จ")</code></pre></div>
+  <section class="task" data-task="a">
+    <div class="task-head"><h3>Part A ดูหน้าตาข้อมูล</h3><span class="who">ทำตามครู</span></div>
+<div class="code"><pre><code>print(df.head())        # 5 แถวแรก
+print(df.columns)       # ชื่อคอลัมน์
+
+# TODO: เติมจากโค้ด ห้ามพิมพ์ตัวเลขเอง
+n_rows = 0              # จำนวนแถว ใช้ df.shape
+n_cols = 0              # จำนวนคอลัมน์
+
+print(n_rows, "แถว", n_cols, "คอลัมน์")
+assert (n_rows, n_cols) == (574, 8)
+print("✅ Part A ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df.shape</code> คืนค่าเป็น (แถว, คอลัมน์) ใช้ <code>df.shape[0]</code> กับ <code>df.shape[1]</code></div></details>
+    <div class="verify"><b>Human Verify:</b> เปิดลิงก์ไฟล์ CSV ในเบราว์เซอร์ (ก๊อป <code>url</code> ไปวาง) ดูแถวแรกด้วยตา แล้วเทียบกับ <code>df.head()</code> ว่าตรงกันไหม ตอบใน Text cell ด้วยว่าแต่ละคอลัมน์น่าจะหมายถึงอะไร</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part A แล้ว</label>
+  </section>
+  <section class="task" data-task="b">
+    <div class="task-head"><h3>Part B ตรวจสุขภาพข้อมูล</h3><span class="who">ทำตามครู</span></div>
+    <p><code>info()</code> บอกชนิดข้อมูลและจำนวนช่องที่ไม่ว่างของแต่ละคอลัมน์ ส่วน <code>isna().sum()</code> นับช่องว่าง</p>
+<div class="code"><pre><code>df.info()
+print(df.describe())
+print(df.isna().sum())
+
+# TODO
+missing_qty = 0          # จำนวนช่องว่างในคอลัมน์ qty
+missing_payment = 0      # จำนวนช่องว่างในคอลัมน์ payment
+qty_is_number = True     # qty เป็นตัวเลขไหม ใช้ pd.api.types.is_numeric_dtype(df["qty"])
+
+assert missing_qty == 5 and missing_payment == 12
+assert qty_is_number == False
+print("✅ Part B ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df.isna().sum()["qty"]</code> &nbsp;ถ้า qty เป็นตัวเลข <code>describe()</code> จะสรุปให้ แต่ตอนนี้ไม่มี qty ในตารางสรุป ลองคิดว่าเพราะอะไร</div></details>
+    <div class="verify"><b>Human Verify:</b> qty ควรเป็นตัวเลข แต่ Pandas บอกว่าไม่ใช่ ดูค่าทุกแบบในคอลัมน์ด้วย <code>df["qty"].unique()</code> แล้วจดใน Text cell ว่า<b>ค่าไหนบ้าง</b>ที่ทำให้ทั้งคอลัมน์ไม่เป็นตัวเลข และมีค่าไหนที่เป็นตัวเลขแต่ดูไม่สมเหตุสมผล</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part B แล้ว</label>
+  </section>
+  <section class="task" data-task="c">
+    <div class="task-head"><h3>Part C นับแต่ละกลุ่ม</h3><span class="who">ทำตามครู</span></div>
+<div class="code"><pre><code>print(df["branch"].value_counts())
+print(df["menu"].value_counts())
+
+# TODO
+n_branch = 0     # มีชื่อสาขากี่แบบ ใช้ .nunique()
+n_menu = 0       # มีชื่อเมนูกี่แบบ
+college = 0      # จำนวนออเดอร์ของ "หน้าวิทยาลัย"
+
+assert n_branch == 3 and n_menu == 7
+assert college == 330
+print("✅ Part C ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df["branch"].value_counts()["หน้าวิทยาลัย"]</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ร้านมีแค่ 2 สาขา 4 เมนู แต่ข้อมูลบอกว่ามี 3 สาขา 7 เมนู <b>ทายก่อน</b>ว่าเกิดอะไรขึ้น แล้วพิสูจน์ด้วย <code>df["branch"].unique()</code> กับ <code>df["menu"].unique()</code> จดใน Text cell ว่าชื่อไหนที่จริง ๆ คือของเดียวกัน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part C แล้ว</label>
+  </section>
+  <section class="task" data-task="d">
+    <div class="task-head"><h3>Part D กรองด้วยหลายเงื่อนไข</h3><span class="who">guided lab</span></div>
+    <p>หลายเงื่อนไขใช้ <code>&amp;</code> (และ) กับ <code>|</code> (หรือ) และ<b>ต้องใส่วงเล็บครอบแต่ละเงื่อนไข</b></p>
+<div class="code"><pre><code># TODO: ทุกตัวเป็น DataFrame ที่กรองแล้ว
+market_transfer = df    # สาขา "ตลาด" และ จ่ายแบบ "โอน"
+cocoa_or_pink = df      # เมนู "โกโก้" หรือ "นมชมพู"
+day14 = df              # ออเดอร์ของวันที่ "2026-11-14"
+early = df              # สาขา "หน้าวิทยาลัย" และ time ก่อน "09:00"
+
+print(len(market_transfer), len(cocoa_or_pink), len(day14), len(early))
+assert len(market_transfer) == 79 and len(cocoa_or_pink) == 220
+assert len(day14) == 15 and len(early) == 84
+print("✅ Part D ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df[(df["branch"] == "ตลาด") &amp; (df["payment"] == "โอน")]</code> &nbsp;เวลาเก็บเป็นข้อความแบบ "08:15" เทียบ <code>&lt; "09:00"</code> ได้เลยเพราะมีเลข 0 นำหน้าครบ</div></details>
+    <div class="verify"><b>Human Verify:</b> <b>ทายก่อน</b>ว่าถ้าเปลี่ยน <code>&amp;</code> เป็น <code>|</code> ใน <code>market_transfer</code> จำนวนแถวจะมากขึ้นหรือน้อยลง แล้วรันดู จากนั้นตอบใน Text cell ว่า 79 ออเดอร์นี้นับ<b>ครบทุกออเดอร์</b>ของสาขาตลาดที่จ่ายโอนจริงไหม (ย้อนดู Human Verify ของ Part C)</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part D แล้ว</label>
+  </section>
+  <section class="task" data-task="e">
+    <div class="task-head"><h3>Part E ยอดเงินของแต่ละออเดอร์</h3><span class="who">guided lab</span></div>
+    <p>ลองสร้างคอลัมน์ยอดเงิน <code>qty × price</code> ตรง ๆ ก่อน แล้วดูว่าเกิดอะไรขึ้น</p>
+<div class="code"><pre><code>try:
+    test = df["qty"] * df["price"]
+    print(test.head())
+except Exception as e:
+    print("เกิด error:", type(e).__name__, e)</code></pre></div>
+    <p>บางเครื่องจะขึ้น error บางเครื่องได้ค่าแปลก ๆ อย่าง <code>4444…</code> ทั้งสองแบบเกิดจากเรื่องเดียวกัน คือ qty ยังเป็นข้อความ บรรทัดด้านล่างแปลงเป็นตัวเลขชั่วคราว ค่าไหนแปลงไม่ได้จะกลายเป็นช่องว่าง (เราจะเรียนเรื่องนี้จริงจังใน C3)</p>
+<div class="code"><pre><code>df["qty_num"] = pd.to_numeric(df["qty"], errors="coerce")
+
+# TODO
+df["amount"] = 0      # ยอดเงิน = qty_num x price
+top5 = df             # 5 ออเดอร์ที่ amount สูงสุด ใช้ sort_values แล้ว head(5)
+
+print(top5[["order_id", "branch", "menu", "qty", "amount"]])
+assert top5["amount"].iloc[0] == 29970
+assert df["amount"].sum() == 94065
+print("✅ Part E ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df.sort_values("amount", ascending=False).head(5)</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ออเดอร์อันดับ 1 สั่งชาเขียวกี่แก้ว ร้านเล็ก ๆ ขายได้จริงไหม เขียนเหตุผลใน Text cell แล้ว<b>ทายก่อน</b>ว่าถ้าตัด 2 ออเดอร์แปลก ๆ นี้ออก ยอดรวมทั้งเดือนจะลดลงประมาณกี่เปอร์เซ็นต์</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part E แล้ว</label>
+  </section>
+
+  <h2>Mission: ตอบคำถามเจ้าของร้าน</h2>
+  <p>เจ้าของร้านส่งคำถามมา 4 ข้อ ให้ตอบจากข้อมูลตามที่มีอยู่ตอนนี้ <b>ห้ามแก้ข้อมูล</b> แล้วปิดด้วย Boss คือรายงานว่าข้อมูลชุดนี้มีปัญหาอะไรบ้าง</p>
+  <div class="note tip">Mission ใช้ <code>df</code> ที่มีคอลัมน์ <code>amount</code> จาก Part E แล้ว ถ้าปิด Colab ไปแล้ว ให้กด <b>Runtime › Run all</b> ก่อน</div>
+  <section class="task" data-task="m1">
+    <div class="task-head"><h3>Level 1 สาขาไหนออเดอร์เยอะกว่า</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง: top_branch = ชื่อสาขาที่มีออเดอร์มากที่สุด, top_branch_n = จำนวนออเดอร์ของสาขานั้น
+
+print(top_branch, top_branch_n)
+assert top_branch == "หน้าวิทยาลัย" and top_branch_n == 330
+print("✅ Level 1 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>value_counts()</code> เรียงจากมากไปน้อยให้อยู่แล้ว ลอง <code>.idxmax()</code> กับ <code>.max()</code></div></details>
+    <div class="verify"><b>Human Verify:</b> สาขาตลาดมีออเดอร์จริง ๆ กี่รายการ ถ้ารวม <code>"ตลาด "</code> ที่มีเว้นวรรคด้วย ลองนับดูแล้วจดไว้ ใช้ตอนทำ Boss</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 1 แล้ว</label>
+  </section>
+  <section class="task" data-task="m2">
+    <div class="task-head"><h3>Level 2 คนจ่ายโอนกี่เปอร์เซ็นต์</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง: transfer_pct = เปอร์เซ็นต์ออเดอร์ที่จ่าย "โอน" จากทุกออเดอร์ ปัดทศนิยม 1 ตำแหน่ง
+
+print(transfer_pct, "%")
+assert transfer_pct == 51.4
+print("✅ Level 2 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>(df["payment"] == "โอน").mean()</code> ให้สัดส่วน 0–1 แล้วคูณ 100 ใช้ <code>round(..., 1)</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ออเดอร์ที่ช่อง payment ว่าง 12 รายการถูกนับในตัวหารด้วยไหม ถ้าไม่นับ เปอร์เซ็นต์จะสูงขึ้นหรือต่ำลง <b>ทายก่อน</b> แล้วคำนวณดู</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 2 แล้ว</label>
+  </section>
+  <section class="task" data-task="m3">
+    <div class="task-head"><h3>Level 3 ยอดขายแต่ละสาขา</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง: college_sales = ยอดเงินรวมของ "หน้าวิทยาลัย", market_sales = ยอดเงินรวมของ "ตลาด"
+
+print(college_sales, market_sales)
+assert college_sales == 53240 and market_sales == 40505
+print("✅ Level 3 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>กรองแถวของสาขานั้นก่อน แล้วเลือกคอลัมน์ amount แล้ว <code>.sum()</code></div></details>
+    <div class="verify"><b>Human Verify:</b> สองยอดนี้บวกกันได้ 93,745 แต่ยอดรวมทั้งเดือนจาก Part E คือ 94,065 เงินที่หายไปอยู่ตรงไหน หาให้เจอแล้วอธิบายใน Text cell</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 3 แล้ว</label>
+  </section>
+  <section class="task" data-task="m4">
+    <div class="task-head"><h3>Level 4 วันที่ขายได้มากที่สุด</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง: best_date = วันที่ (ข้อความ) ที่มีออเดอร์มากที่สุด, best_date_n = จำนวนออเดอร์วันนั้น
+
+print(best_date, best_date_n)
+assert best_date == "2026-11-25" and best_date_n == 25
+print("✅ Level 4 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ใช้ <code>value_counts</code> กับคอลัมน์ date</div></details>
+    <div class="verify"><b>Human Verify:</b> ดูว่าวันนั้นตรงกับวันอะไรในสัปดาห์ (ดูจากปฏิทินก็ได้) แล้วเดาเหตุผลว่าทำไมวันนั้นขายดี เขียนใน Text cell</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Level 4 แล้ว</label>
+  </section>
+  <section class="task" data-task="m5">
+    <div class="task-head"><h3>Level 5 Boss: รายงานปัญหาในข้อมูล</h3><span class="who">ไม่มี assert</span></div>
+    <p>ก่อนส่งคำตอบให้เจ้าของร้าน เราต้องบอกด้วยว่าข้อมูลมีปัญหาอะไรบ้าง เพิ่ม Text cell แล้วทำตารางนี้ให้ครบทุกปัญหาที่เจอในบทนี้ <b>แต่ละข้อต้องมีโค้ดที่เป็นหลักฐาน</b></p>
+<div class="code"><pre><code>| ปัญหา | คอลัมน์ | กี่แถว | โค้ดที่ใช้ตรวจ | กระทบคำตอบข้อไหน |
+|---|---|---|---|---|
+| ... | ... | ... | ... | ... |</code></pre></div>
+    <p>มีปัญหาอย่างน้อย 6 แบบซ่อนอยู่ เจอให้ได้มากที่สุด</p>
+    <details><summary>คำใบ้</summary><div>ย้อนดู Human Verify ทุกข้อ ลองตรวจ <code>df.duplicated().sum()</code> ด้วย</div></details>
+    <div class="verify"><b>Human Verify:</b> สุดท้ายตอบว่าคำตอบ Level 1–4 ข้อไหน<b>น่าเชื่อถือน้อยที่สุด</b> เพราะปัญหาข้อไหน ตารางนี้คือโจทย์ที่เราจะแก้ใน C3</div>
+    <label class="check"><input type="checkbox"> เขียนตารางปัญหาพร้อมหลักฐานแล้ว และตอบว่าคำตอบข้อไหนน่าเชื่อถือน้อยที่สุด</label>
+  </section>
+
+  <h2>Exit Ticket</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบสั้น ๆ</p>
+  <ol class="steps">
+    <li>ถ้าส่งยอดขาย 94,065 บาทให้เจ้าของร้านตอนนี้เลย จะเกิดอะไรขึ้น</li>
+    <li>คำสั่ง Pandas ตัวไหนที่ช่วยให้เจอปัญหาในข้อมูลได้มากที่สุด</li>
+    <li>Human Verify ข้อไหนที่ทายผิด และตอนนี้เข้าใจแล้วว่าผิดเพราะอะไร</li>
+  </ol>
+  <div class="note">เก็บตารางปัญหาจาก Boss ไว้ให้ดี บทหน้าเราจะไล่แก้ทีละข้อ แล้วดูว่ายอดขายจริงคือเท่าไร</div>
+
+  <h2>ส่งงาน</h2>
+  <ol class="steps">
+    <li>กด <b>Runtime › Restart and run all</b> ให้ทุก cell รันผ่านจากบนลงล่าง</li>
+    <li>กด <b>Share</b> เปลี่ยนเป็น <b>Anyone with the link</b> สิทธิ์ <b>Viewer</b></li>
+    <li>กด <b>Copy link</b> แล้วส่งทางช่องทางส่งงานของห้อง</li>
+  </ol>
+</main>
+
+<script src="lesson.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C3 Pandas ทำความสะอาดข้อมูล</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-key="ds-c3-passed">
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/9 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">C3 &nbsp;ต่อจาก C2 ใช้ตารางปัญหาจาก Boss ของ C2</p>
+    <h1>Pandas: ทำความสะอาดข้อมูล</h1>
+    <p>ใน C2 เราพบว่าไฟล์ออเดอร์ของร้านมีทั้งออเดอร์ซ้ำ ช่องว่าง ชื่อเมนูไม่ตรงกัน และจำนวนแก้วที่เป็นไปไม่ได้ ยอดขาย 94,065 บาทที่คำนวณได้จึงเชื่อไม่ได้ บทนี้เราจะไล่แก้ทีละปัญหา แล้วหาว่ายอดขายจริงของร้านคือเท่าไร</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทำบทนี้เสร็จแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>ลบข้อมูลซ้ำ และจัดการช่องว่างได้ พร้อมให้เหตุผลว่าทำไมเลือกลบหรือเติม</li>
+    <li>ทำข้อความให้เป็นรูปแบบเดียวกันด้วย <code>str.strip</code> และ <code>replace</code></li>
+    <li>แปลงชนิดข้อมูลเป็นตัวเลขและวันที่ได้ถูกต้อง</li>
+    <li>ตั้งเกณฑ์และตัดค่าผิดปกติออก พร้อมบอกเหตุผล</li>
+    <li>รวมทุกขั้นเป็นฟังก์ชัน <code>clean_orders()</code> และบันทึกเป็นไฟล์ใหม่</li>
+    <li>เขียน Cleaning Log บอกว่าตัดอะไรไปเพราะอะไร และใช้ AI ช่วยโดยตรวจเองได้ทุกขั้น</li>
+  </ul>
+  <p class="sub" style="margin-top:12px">ทำไมต้องเรียน: ถ้าข้อมูลสกปรก กราฟและโมเดลที่ทำต่อจากนี้จะผิดตามไปด้วย ไม่ว่าจะเขียนโค้ดเก่งแค่ไหน ข้อมูลที่ clean แล้วจากบทนี้คือข้อมูลที่เราจะใช้ใน C4 และ C5</p>
+
+  <h2>ใช้ AI ในบทนี้: AI Work, Human Verify</h2>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอกโจทย์ ข้อมูล และผลที่ต้องได้ให้ชัด</li>
+        <li>สั่งให้แก้เฉพาะ <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>บทนี้ให้สั่ง AI ด้วยว่า <b>นับจำนวนแถวก่อนและหลังทุกขั้น</b> ถ้า AI ตัดข้อมูลทิ้งโดยไม่บอก ห้ามใช้</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยไม่แตะ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดตัวเอง</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจในกรอบเส้นประ และทายผลก่อนรัน</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">ข้อไหนใช้ AI ให้เขียน <b>AI Log</b> ใต้ข้อนั้น ว่าถามอะไร และตรวจด้วยวิธีไหน</div>
+
+  <div class="box">
+    <h3>สิ่งที่ต้องส่ง</h3>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>C3_ชื่อเล่น_เลขที่</code> ที่ Part A–E รันผ่าน มีฟังก์ชัน <code>clean_orders</code> มี Cleaning Log และ AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket</p>
+  </div>
+
+  <h2>เริ่มต้น: โหลดข้อมูลดิบ</h2>
+  <p>เปิดตารางปัญหาจาก Boss ของ C2 ไว้ข้าง ๆ ระหว่างทำแต่ละ Part ให้ติ๊กว่าแก้ปัญหาข้อไหนไปแล้ว ส่วน <code>raw</code> ให้เก็บไว้ไม่แตะ ใช้เทียบตอนท้าย</p>
+<div class="code"><pre><code>import pandas as pd
+
+url = "{{DATA}}/orders_raw.csv"
+raw = pd.read_csv(url)     # ข้อมูลดิบ ห้ามแก้
+df = raw.copy()            # ตัวที่เราจะทำความสะอาด
+print("เริ่มที่", len(df), "แถว")</code></pre></div>
+  <div class="note">ทุก Part แก้ <code>df</code> ต่อจาก Part ก่อนหน้า ต้อง<b>รันตามลำดับ</b> ถ้ารันซ้ำแล้ว assert ไม่ผ่าน ให้กลับไปรัน cell โหลดข้อมูลใหม่แล้วไล่มาอีกรอบ</div>
+  <section class="task" data-task="a">
+    <div class="task-head"><h3>Part A ลบออเดอร์ซ้ำ</h3><span class="who">ทำตามครู</span></div>
+<div class="code"><pre><code># TODO
+dup_count = 0             # จำนวนแถวที่ซ้ำ ใช้ df.duplicated().sum()
+df = df                   # ลบแถวซ้ำออก ใช้ drop_duplicates()
+
+print("ซ้ำ", dup_count, "แถว เหลือ", len(df), "แถว")
+assert dup_count == 12 and len(df) == 562
+print("✅ Part A ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df = df.drop_duplicates()</code> ต้องเอาผลกลับไปเก็บใน df ด้วย ไม่งั้น df จะเหมือนเดิม</div></details>
+    <div class="verify"><b>Human Verify:</b> ดูแถวที่ซ้ำด้วย <code>raw[raw.duplicated(keep=False)].sort_values("order_id").head(6)</code> แล้วตอบใน Text cell ว่าเรารู้ได้ยังไงว่านี่คือการจดซ้ำ ไม่ใช่ลูกค้าสั่งเหมือนกัน 2 ครั้ง (ดูที่คอลัมน์ไหน)</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part A แล้ว</label>
+  </section>
+  <section class="task" data-task="b">
+    <div class="task-head"><h3>Part B จัดการช่องว่าง</h3><span class="who">ทำตามครู</span></div>
+    <p>ช่องว่างแต่ละคอลัมน์ต้องคิดต่างกัน ถ้าไม่รู้ว่าขายไปกี่แก้ว เราคิดเงินไม่ได้ ต้องลบทั้งแถว แต่ถ้าไม่รู้ว่าจ่ายยังไง ยอดเงินยังใช้ได้ จึงเติมคำว่า "ไม่ระบุ" แทน</p>
+<div class="code"><pre><code>print(df.isna().sum())
+
+# TODO
+df = df                   # ลบแถวที่ qty ว่าง ใช้ dropna(subset=["qty"])
+df["payment"] = df["payment"]   # เติม "ไม่ระบุ" ในช่อง payment ที่ว่าง ใช้ fillna
+
+print(df.isna().sum())
+print("เหลือ", len(df), "แถว")
+assert df.isna().sum().sum() == 0
+assert len(df) == 557 and (df["payment"] == "ไม่ระบุ").sum() == 11
+print("✅ Part B ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df["payment"].fillna("ไม่ระบุ")</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ใน C2 payment ว่าง 12 ช่อง แต่ตอนนี้เติม "ไม่ระบุ" ไปแค่ 11 ช่อง <b>ทายก่อน</b>ว่าอีก 1 ช่องหายไปไหน แล้วพิสูจน์ด้วยโค้ด จากนั้นตอบด้วยว่าถ้าเราเติม qty ที่ว่างด้วยค่าเฉลี่ย จะเกิดปัญหาอะไรกับยอดเงิน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part B แล้ว</label>
+  </section>
+  <section class="task" data-task="c">
+    <div class="task-head"><h3>Part C ทำข้อความให้ตรงกัน</h3><span class="who">guided lab</span></div>
+<div class="code"><pre><code>print(df["branch"].unique())
+print(df["menu"].unique())
+
+# TODO
+df["branch"] = df["branch"]   # ตัดช่องว่างหน้า-หลัง ใช้ .str.strip()
+df["menu"] = df["menu"]       # ตัดช่องว่าง แล้วเปลี่ยน "Thai Tea" เป็น "ชาไทย"
+
+print(df["branch"].value_counts())
+print(df["menu"].value_counts())
+assert sorted(df["branch"].unique()) == ["ตลาด", "หน้าวิทยาลัย"]
+assert sorted(df["menu"].unique()) == ["ชาเขียว", "ชาไทย", "นมชมพู", "โกโก้"]
+print("✅ Part C ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ต่อคำสั่งได้: <code>df["menu"].str.strip().replace("Thai Tea", "ชาไทย")</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ถ้าทำแค่ <code>replace("Thai Tea", "ชาไทย")</code> แต่ลืม <code>strip()</code> <b>ทายก่อน</b>ว่าจะเหลือเมนูกี่แบบ แล้วลองใน cell แยกด้วย <code>raw["menu"].replace("Thai Tea", "ชาไทย").nunique()</code> ตอบด้วยว่าทำไมลำดับการ strip กับ replace ถึงสำคัญ</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part C แล้ว</label>
+  </section>
+  <section class="task" data-task="d">
+    <div class="task-head"><h3>Part D แปลงชนิดข้อมูล</h3><span class="who">guided lab</span></div>
+    <p>qty ยังมีค่าอย่าง <code>"2 แก้ว"</code> อยู่ ต้องตัดคำว่า " แก้ว" ออกก่อน แล้วค่อยแปลงเป็นตัวเลข ส่วน date ต้องแปลงเป็นวันที่ เพื่อจะได้ดูว่าเป็นวันอะไรของสัปดาห์</p>
+<div class="code"><pre><code># TODO
+df["qty"] = df["qty"]     # ตัด " แก้ว" ออกด้วย .str.replace แล้วแปลงด้วย pd.to_numeric
+df["date"] = df["date"]   # แปลงเป็นวันที่ ใช้ pd.to_datetime
+
+print(df.dtypes)
+assert pd.api.types.is_numeric_dtype(df["qty"])
+assert pd.api.types.is_datetime64_any_dtype(df["date"])
+assert df["qty"].isna().sum() == 0
+print("✅ Part D ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>pd.to_numeric(df["qty"].str.replace(" แก้ว", ""))</code> &nbsp;วันที่: <code>pd.to_datetime(df["date"])</code> แล้วลอง <code>df["date"].dt.day_name()</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ใน cell แยก <b>ทายก่อน</b>ว่า <code>pd.to_numeric(pd.Series(["3", "2 แก้ว"]), errors="coerce")</code> จะได้อะไร แล้วรันดู ตอบใน Text cell ว่าถ้าเราใช้ <code>errors="coerce"</code> เลยโดยไม่ตัดคำว่า " แก้ว" ก่อน จะเสียออเดอร์ไปกี่รายการ</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part D แล้ว</label>
+  </section>
+  <section class="task" data-task="e">
+    <div class="task-head"><h3>Part E ตัดค่าผิดปกติ</h3><span class="who">guided lab</span></div>
+    <p>ตอนนี้ qty เป็นตัวเลขแล้ว ดูค่าต่ำสุดสูงสุดได้ ให้ตั้งเกณฑ์ว่าจำนวนแก้วต่อออเดอร์ที่สมเหตุสมผลคือเท่าไร แล้วตัดแถวที่อยู่นอกเกณฑ์ออก</p>
+<div class="code"><pre><code>print(df["qty"].describe())
+print(df["qty"].value_counts().sort_index())
+
+# TODO: เก็บเฉพาะแถวที่ qty มากกว่า 0 และไม่เกิน 20 แล้วต่อท้ายด้วย .copy()
+df = df
+
+df["amount"] = df["qty"] * df["price"]
+print("เหลือ", len(df), "แถว ยอดขายรวม", df["amount"].sum(), "บาท")
+assert len(df) == 552
+assert df["amount"].sum() == 38805
+print("✅ Part E ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>df[(df["qty"] &gt; 0) &amp; (df["qty"] &lt;= 20)].copy()</code> &nbsp;ถ้าไม่ใส่ <code>.copy()</code> อาจเห็นคำเตือน SettingWithCopyWarning ตอนสร้างคอลัมน์ amount</div></details>
+    <div class="verify"><b>Human Verify:</b> เกณฑ์ 20 แก้วมาจากไหน ดูจาก <code>value_counts</code> ว่าออเดอร์ปกติที่มากที่สุดคือกี่แก้ว แล้วเขียนเหตุผลใน Text cell <b>ทายก่อน</b>ด้วยว่าถ้าเปลี่ยนเกณฑ์เป็น 1000 จะเหลือกี่แถว และยอดขายจะเป็นเท่าไร</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำ Human Verify Part E แล้ว</label>
+  </section>
+
+  <h2>Mission: ส่งข้อมูลที่เชื่อได้ให้เจ้าของร้าน</h2>
+  <p>เดือนหน้าเจ้าของร้านจะส่งไฟล์ใหม่มาอีก เราไม่อยากไล่ทำ Part A–E ใหม่ทุกเดือน งานนี้คือรวมทุกขั้นเป็นฟังก์ชันเดียว แล้วตอบคำถามจาก C2 ใหม่ด้วยข้อมูลที่ clean แล้ว</p>
+  <section class="task" data-task="m1">
+    <div class="task-head"><h3>Level 1 ฟังก์ชัน clean_orders</h3><span class="who">มีแค่ assert</span></div>
+    <p>เขียนฟังก์ชัน <code>clean_orders(data)</code> รับ DataFrame ดิบ แล้วคืน DataFrame ที่ผ่านขั้น A–E ครบ และมีคอลัมน์ <code>amount</code> <b>ห้ามพิมพ์เลขแถวหรือ order_id ลงไปในฟังก์ชัน</b></p>
+<div class="code"><pre><code># เขียนฟังก์ชัน clean_orders เอง
+# บรรทัดแรกในฟังก์ชันให้เป็น: data = data.copy()
+
+clean = clean_orders(raw)
+print(clean.shape)
+assert clean.shape == (552, 9)
+assert clean["amount"].sum() == 38805
+assert len(raw) == 574, "raw ถูกแก้ไปแล้ว ฟังก์ชันต้องไม่แตะข้อมูลดิบ"
+print("✅ Level 1 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ก๊อปโค้ดจาก Part A–E มาเรียงในฟังก์ชัน เปลี่ยน <code>df</code> เป็น <code>data</code> แล้ว <code>return data</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ฟังก์ชันที่ดีต้องใช้กับไฟล์เดือนหน้าได้ สร้างข้อมูลทดสอบ 3 แถวเอง (ซ้ำ 1 แถว และ qty เป็น "5 แก้ว" 1 แถว) <b>คิดคำตอบก่อน</b>ว่าจะเหลือกี่แถว ยอดเงินเท่าไร แล้วส่งเข้า <code>clean_orders</code> ดูว่าตรงไหม</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทดสอบกับข้อมูลที่สร้างเองแล้ว</label>
+  </section>
+  <section class="task" data-task="m2">
+    <div class="task-head"><h3>Level 2 บันทึกไฟล์ไว้ใช้ต่อ</h3><span class="who">มีโครงให้</span></div>
+    <p>C4 จะใช้ไฟล์นี้ต่อ ให้บันทึกลง Google Drive จะได้ไม่หายตอนปิด Colab</p>
+<div class="code"><pre><code>from google.colab import drive
+drive.mount("/content/drive")
+
+path = "/content/drive/MyDrive/orders_clean.csv"
+clean.to_csv(path, index=False)
+
+check = pd.read_csv(path)
+assert len(check) == 552
+print("✅ Level 2 ผ่าน บันทึกที่", path)</code></pre></div>
+    <div class="verify"><b>Human Verify:</b> เปิด Google Drive แล้วหาไฟล์ <code>orders_clean.csv</code> ให้เจอ เปิดดูว่ามีคอลัมน์ amount และไม่มีคำว่า "แก้ว" เหลืออยู่ <b>ทายก่อน</b>ด้วยว่าถ้าไม่ใส่ <code>index=False</code> ไฟล์จะมีอะไรเกินมา</div>
+    <label class="check"><input type="checkbox"> บันทึกแล้ว และเปิดเช็คไฟล์ใน Drive แล้ว</label>
+  </section>
+  <section class="task" data-task="m3">
+    <div class="task-head"><h3>Level 3 ตอบคำถามจาก C2 ใหม่</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง ใช้ clean ทุกข้อ
+# college_n     = จำนวนออเดอร์ของ "หน้าวิทยาลัย"
+# market_n      = จำนวนออเดอร์ของ "ตลาด"
+# transfer_pct  = เปอร์เซ็นต์ที่จ่าย "โอน" ปัดทศนิยม 1 ตำแหน่ง
+# market_sales  = ยอดเงินรวมของ "ตลาด"
+
+assert college_n == 318 and market_n == 234
+assert transfer_pct == 51.1
+assert market_sales == 15775
+print("✅ Level 3 ผ่าน")</code></pre></div>
+    <div class="verify"><b>Human Verify:</b> ทำตารางเทียบคำตอบ C2 กับ C3 ทีละข้อใน Text cell ข้อไหนเปลี่ยนมากที่สุด และเปลี่ยนเพราะปัญหาข้อไหนในตารางของ Boss C2</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และทำตารางเทียบ C2 กับ C3 แล้ว</label>
+  </section>
+  <section class="task" data-task="m4">
+    <div class="task-head"><h3>Level 4 Boss: Cleaning Log</h3><span class="who">ไม่มี assert</span></div>
+    <p>เจ้าของร้านจะถามแน่ ๆ ว่า "ทำไมยอดขายจาก 94,065 เหลือ 38,805 บาท" ให้เขียน Cleaning Log ตอบ โดยใช้โค้ดหาตัวเลขในทุกช่อง</p>
+<div class="code"><pre><code>| ขั้นตอน | แถวก่อน | แถวหลัง | ตัดไปกี่แถว | ยอดเงินที่หายไป | เหตุผล |
+|---|---|---|---|---|---|
+| ลบออเดอร์ซ้ำ | 574 | 562 | 12 | ... | ... |
+| ... | ... | ... | ... | ... | ... |</code></pre></div>
+    <p>ปิดท้ายด้วยข้อความ 3–4 บรรทัดถึงเจ้าของร้าน บอกยอดขายจริง ขั้นไหนทำให้ยอดเปลี่ยนมากที่สุด และร้านควรจดออเดอร์ยังไงเดือนหน้าจะได้ไม่มีปัญหานี้</p>
+    <details><summary>คำใบ้</summary><div>ยอดเงินที่หายไปของแต่ละขั้น หาได้จากการคำนวณ amount ก่อนและหลังขั้นนั้นแล้วลบกัน ขั้นแรก ๆ ที่ qty ยังเป็นข้อความ ใช้ <code>pd.to_numeric(..., errors="coerce")</code> ชั่วคราวแบบ C2</div></details>
+    <div class="verify"><b>Human Verify:</b> ผลรวมของ "ยอดเงินที่หายไป" ทุกขั้น ต้องเท่ากับยอดที่ต่างกันจริงพอดี ถ้าไม่เท่า แปลว่ามีขั้นไหนคิดผิด หาให้เจอ</div>
+    <label class="check"><input type="checkbox"> เขียน Cleaning Log ครบ ยอดรวมตรงกัน และเขียนข้อความถึงเจ้าของร้านแล้ว</label>
+  </section>
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>Bonus วันหยุดสาขาหน้าวิทยาลัย</h3><span class="who">ไม่บังคับ</span></div>
+    <p>ตอนนี้ date เป็นวันที่แล้ว ใช้ <code>.dt.dayofweek</code> ได้ (จันทร์ = 0 ถึงอาทิตย์ = 6) ให้นับว่าสาขาหน้าวิทยาลัยมีออเดอร์วันเสาร์-อาทิตย์กี่รายการ และวันธรรมดากี่รายการ</p>
+<div class="code"><pre><code># เขียนเอง: weekend_n, weekday_n
+
+print(weekend_n, weekday_n)
+assert weekend_n == 35 and weekday_n == 283
+print("✅ Bonus ผ่าน")</code></pre></div>
+    <p class="sub">ลองคิดต่อ: เดือนพฤศจิกายนมีวันเสาร์-อาทิตย์ 9 วัน เฉลี่ยวันหยุดขายได้วันละกี่ออเดอร์ เทียบกับวันธรรมดา แล้วเจ้าของร้านควรเปิดสาขานี้วันหยุดไหม</p>
+  </section>
+
+  <h2>Exit Ticket</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบสั้น ๆ</p>
+  <ol class="steps">
+    <li>แถวที่เราตัดทิ้งไป มีแถวไหนบ้างที่จริง ๆ อาจไม่ควรตัด เพราะอะไร</li>
+    <li>ถ้าให้ AI clean ข้อมูลให้ทั้งหมดในคำสั่งเดียว เราจะตรวจยังไงว่ามันตัดถูก</li>
+    <li>Human Verify ข้อไหนที่ทายผิด และตอนนี้เข้าใจแล้วว่าผิดเพราะอะไร</li>
+  </ol>
+  <div class="note">ไฟล์ <code>orders_clean.csv</code> ใน Drive คือข้อมูลตั้งต้นของ C4 อย่าลบนะ</div>
+
+  <h2>ส่งงาน</h2>
+  <ol class="steps">
+    <li>กด <b>Runtime › Restart and run all</b> ให้ทุก cell รันผ่านจากบนลงล่าง</li>
+    <li>กด <b>Share</b> เปลี่ยนเป็น <b>Anyone with the link</b> สิทธิ์ <b>Viewer</b></li>
+    <li>กด <b>Copy link</b> แล้วส่งทางช่องทางส่งงานของห้อง</li>
+  </ol>
+</main>
+
+<script src="lesson.js"></script>
+</body>
+</html>

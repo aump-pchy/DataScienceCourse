@@ -1,3 +1,11 @@
+// เติม URL ของไฟล์ข้อมูลในโค้ด ({{DATA}} = โฟลเดอร์ data ของเว็บนี้)
+document.querySelectorAll('pre code').forEach(c => {
+  if (c.textContent.includes('{{DATA}}')) {
+    const base = new URL('data/', location.href).href.replace(/\/$/, '');
+    c.textContent = c.textContent.split('{{DATA}}').join(base);
+  }
+});
+
 // ปุ่มคัดลอกโค้ด
 document.querySelectorAll('.code').forEach(box => {
   const btn = document.createElement('button');

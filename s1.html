@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>S1 ห้องสมุด</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-key="ds-s1-passed">
+<div class="bar"><div class="bar-in">
+  <a href="index.html">← หน้าวิชา</a>
+  <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+  <span class="count" id="count">ผ่าน 0/6 ข้อ</span>
+</div></div>
+
+<main>
+  <header>
+    <p class="sub">Sprint 1 &nbsp;ทำเองได้ ใช้ความรู้จาก C2 และ C3 เท่านั้น ไม่มีเนื้อหาใหม่</p>
+    <h1>Sprint 1: ข้อมูลการยืมหนังสือของห้องสมุด</h1>
+    <p>บรรณารักษ์ของวิทยาลัยส่งไฟล์บันทึกการยืมหนังสือช่วงต้นภาคเรียนมาให้ อยากรู้ว่าแผนกไหนยืมเยอะ คืนช้ากี่เปอร์เซ็นต์ และค่าปรับรวมเท่าไร แต่ไฟล์นี้จดด้วยมือหลายคน เลยมีปัญหาแบบเดียวกับไฟล์ร้านชาไทย รอบนี้ไม่มีครูพาทำ ต้องสำรวจ clean และตอบคำถามเองให้ครบ</p>
+  </header>
+
+  <h2 style="margin-top:28px">ทำบทนี้เสร็จแล้ว จะทำได้</h2>
+  <ul class="gains">
+    <li>สำรวจข้อมูลชุดใหม่และหาปัญหาเองได้ โดยไม่มีคนบอกว่าปัญหาอยู่ตรงไหน</li>
+    <li>ปรับฟังก์ชัน clean จาก C3 ไปใช้กับข้อมูลคนละเรื่องได้</li>
+    <li>คำนวณคอลัมน์ใหม่ตามกติกาที่กำหนด เช่น ค่าปรับคืนช้า</li>
+    <li>ตอบคำถามจากข้อมูล แล้วเขียนรายงานให้คนที่ไม่ได้เขียนโค้ดอ่านเข้าใจ</li>
+    <li>ใช้ Gen AI ช่วยได้ แต่พิสูจน์เองได้ทุกตัวเลขที่ส่ง</li>
+  </ul>
+  <p class="sub" style="margin-top:12px">ทำไม Sprint นี้สำคัญ: ใน C2 และ C3 ครูพาเราหาปัญหาทีละจุด แต่งานจริงไม่มีใครบอกว่าข้อมูลผิดตรงไหน ถ้าทำ Sprint นี้ได้ด้วยตัวเอง แปลว่าเราสำรวจและ clean ข้อมูลเป็นจริง ไม่ได้แค่ทำตาม</p>
+
+  <h2>ใช้ AI ในบทนี้: AI Work, Human Verify</h2>
+  <div class="loop">
+    <div class="ai">
+      <h3>AI Work</h3>
+      <ol>
+        <li>บอกโจทย์ ข้อมูล และผลที่ต้องได้ให้ชัด</li>
+        <li>สั่งให้แก้เฉพาะ <code>TODO</code> ห้ามแก้บรรทัด <code>assert</code></li>
+        <li>เปิดหน้า <a href="c3.html">C3</a> ไว้ด้วย ถ้า AI ใช้คำสั่งที่ไม่เคยเรียน ให้ถามว่าทำแบบที่เรียนใน C3 ได้ไหม</li>
+      </ol>
+    </div>
+    <div class="hv">
+      <h3>Human Verify</h3>
+      <ol>
+        <li><b>รันผ่าน</b> เห็น ✅ โดยไม่แตะ <code>assert</code></li>
+        <li><b>อธิบายได้</b> ทุกบรรทัดด้วยคำพูดตัวเอง</li>
+        <li><b>ทดสอบได้</b> ทำภารกิจในกรอบเส้นประ และทายผลก่อนรัน</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">ข้อไหนใช้ AI ให้เขียน <b>AI Log</b> ใต้ข้อนั้น ว่าถามอะไร และตรวจด้วยวิธีไหน</div>
+
+  <div class="box">
+    <h3>สิ่งที่ต้องส่ง</h3>
+    <p style="margin:0">ลิงก์ notebook ชื่อ <code>S1_ชื่อเล่น_เลขที่</code> ที่ทำ Step 1–5 รายงานถึงบรรณารักษ์ (Step 5) มี AI Log ในข้อที่ใช้ AI และตอบ Exit Ticket</p>
+  </div>
+
+  <div class="note tip"><b>ทำเองทั้งคาบ</b> ถ้าติดเกิน 10 นาที ให้ทำตามลำดับนี้ (1) เปิดคำใบ้ (2) ย้อนดูข้อเดียวกันใน C2 หรือ C3 (3) ถามเพื่อนข้าง ๆ (4) ถาม AI ตามกติกา AI Work, Human Verify แล้วจด AI Log</div>
+
+  <h2>ข้อมูลและกติกาของห้องสมุด</h2>
+<div class="code"><pre><code>import pandas as pd
+
+url = "{{DATA}}/library_raw.csv"
+raw = pd.read_csv(url)     # ข้อมูลดิบ ห้ามแก้
+print(raw.head())</code></pre></div>
+  <div class="box">
+    <h3>บรรณารักษ์แจ้งกติกามาแบบนี้</h3>
+    <ol class="steps">
+      <li>แต่ละแถวคือการยืม 1 ครั้ง <code>borrow_id</code> ไม่ซ้ำกัน ถ้าซ้ำแปลว่าจดซ้ำ</li>
+      <li><code>days</code> คือจำนวนวันที่ยืมจนคืน ยืมได้ 1–30 วัน ค่าที่อยู่นอกช่วงนี้คือจดผิด ให้ตัดทิ้ง ถ้าว่างก็ตัดทิ้ง เพราะคิดค่าปรับไม่ได้</li>
+      <li>ถ้าไม่รู้หมวดหนังสือ ให้ใส่ <code>"ไม่ระบุ"</code> ยังนับการยืมได้</li>
+      <li>แผนกมีแค่ 5 แผนก คือ IT, AI, ช่างยนต์, ช่างไฟฟ้า, การบัญชี แต่มีคนจดชื่อเรียกแบบอื่นปนมา</li>
+      <li>ยืมได้ฟรี 7 วัน เกินจากนั้นปรับ<b>วันละ 5 บาท</b> เช่น ยืม 10 วัน ปรับ 15 บาท</li>
+    </ol>
+  </div>
+  <section class="task" data-task="s1">
+    <div class="task-head"><h3>Step 1 สำรวจก่อน clean</h3><span class="who">มีแค่ assert</span></div>
+    <p>ใช้คำสั่งจาก C2 สำรวจ <code>raw</code> แล้วเติมตัวแปรด้านล่างด้วยโค้ด ห้ามพิมพ์ตัวเลขเอง</p>
+<div class="code"><pre><code># เขียนเอง:
+# n_rows        = จำนวนแถว
+# dup_count     = จำนวนแถวที่ซ้ำ
+# missing_days  = จำนวนช่องว่างใน days
+# missing_cat   = จำนวนช่องว่างใน category
+# n_dept        = มีชื่อแผนกกี่แบบในข้อมูลดิบ
+
+assert n_rows == 439 and dup_count == 9
+assert missing_days == 4 and missing_cat == 14
+assert n_dept == 12
+print("✅ Step 1 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ทุกคำสั่งอยู่ใน C2 Part A–C: <code>shape</code>, <code>duplicated().sum()</code>, <code>isna().sum()</code>, <code>nunique()</code></div></details>
+    <div class="verify"><b>Human Verify:</b> ทำตารางปัญหาแบบ Boss ของ C2 ใน Text cell ให้ครบทุกปัญหาที่เจอ ใช้ <code>raw["department"].unique()</code> และ <code>raw["days"].unique()</code> เป็นหลักฐาน แล้วจับคู่ว่าชื่อแผนกแบบแปลก ๆ แต่ละชื่อ จริง ๆ คือแผนกไหน</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และเขียนตารางปัญหาพร้อมหลักฐานแล้ว</label>
+  </section>
+  <section class="task" data-task="s2">
+    <div class="task-head"><h3>Step 2 ฟังก์ชัน clean_borrows</h3><span class="who">มีแค่ assert</span></div>
+    <p>เขียนฟังก์ชัน <code>clean_borrows(data)</code> ตามกติกาข้อ 1–4 ของบรรณารักษ์ ใช้ <code>clean_orders</code> จาก C3 เป็นต้นแบบ ชื่อแผนกให้แก้ด้วย dict นี้</p>
+<div class="code"><pre><code>DEPT_FIX = {"ไอที": "IT", "เทคโนโลยีสารสนเทศ": "IT", "บัญชี": "การบัญชี"}
+
+def clean_borrows(data):
+    data = data.copy()
+    # เขียนต่อเอง ตามกติกาข้อ 1-4
+    return data
+
+clean = clean_borrows(raw)
+print(clean.shape)
+print(clean["department"].value_counts())
+assert clean.shape == (422, 5)
+assert sorted(clean["department"].unique()) == ["AI", "IT", "การบัญชี", "ช่างยนต์", "ช่างไฟฟ้า"]
+assert pd.api.types.is_numeric_dtype(clean["days"])
+assert (clean["category"] == "ไม่ระบุ").sum() == 13
+assert len(raw) == 439, "raw ถูกแก้ไปแล้ว"
+print("✅ Step 2 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div><code>replace</code> รับ dict ได้ แก้หลายคำพร้อมกัน: <code>.replace(DEPT_FIX)</code> แต่ต้อง <code>strip()</code> ก่อน &nbsp;days มีคำว่า " วัน" ต่อท้าย แก้แบบเดียวกับ " แก้ว" ใน C3 Part D</div></details>
+    <div class="verify"><b>Human Verify:</b> ใน Step 1 category ว่าง 14 ช่อง แต่ตอนนี้ "ไม่ระบุ" มีแค่ 13 <b>ทายก่อน</b>ว่าอีกช่องหายไปไหน แล้วพิสูจน์ด้วยโค้ด จากนั้นจดใน Text cell ว่าแต่ละขั้นตัดแถวไปกี่แถว (ใช้ทำ Step 5)</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และนับแถวที่ถูกตัดในแต่ละขั้นแล้ว</label>
+  </section>
+  <section class="task" data-task="s3">
+    <div class="task-head"><h3>Step 3 คำนวณค่าปรับ</h3><span class="who">มีแค่ assert</span></div>
+    <p>เพิ่มคอลัมน์ <code>late_days</code> (จำนวนวันที่เกิน 7 วัน ถ้าไม่เกินให้เป็น 0) และ <code>fine</code> (ค่าปรับ) ลงใน <code>clean</code> ตามกติกาข้อ 5 <b>ห้ามใช้ for loop</b></p>
+<div class="code"><pre><code># เขียนเอง
+
+print(clean[["days", "late_days", "fine"]].head(10))
+assert clean["late_days"].min() == 0
+assert (clean["late_days"] &gt; 0).sum() == 143
+assert clean["fine"].sum() == 2790
+print("✅ Step 3 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ใช้ <code>np.where</code> จาก C1 Part D: ถ้า days มากกว่า 7 ให้เป็น days - 7 ไม่งั้นเป็น 0 (อย่าลืม <code>import numpy as np</code>)</div></details>
+    <div class="verify"><b>Human Verify:</b> เลือก 3 แถวที่ days เป็น 5, 7 และ 12 <b>คิดค่าปรับมือก่อน</b> แล้วเทียบกับผลจากโค้ด แถวที่ยืม 7 วันพอดีต้องไม่โดนปรับ ถ้าโดน แปลว่าเงื่อนไขผิด</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และเทียบค่าปรับกับที่คิดมือแล้ว</label>
+  </section>
+  <section class="task" data-task="s4">
+    <div class="task-head"><h3>Step 4 ตอบคำถามบรรณารักษ์</h3><span class="who">มีแค่ assert</span></div>
+<div class="code"><pre><code># เขียนเอง ใช้ clean ทุกข้อ
+# top_dept      = แผนกที่ยืมมากที่สุด
+# late_pct      = เปอร์เซ็นต์การยืมที่คืนช้า (late_days &gt; 0) ปัดทศนิยม 1 ตำแหน่ง
+# acc_fine      = ค่าปรับรวมของแผนก "การบัญชี"
+# it_comp_pct   = ในการยืมของแผนก IT เป็นหมวด "คอมพิวเตอร์" กี่เปอร์เซ็นต์ ปัดทศนิยม 1 ตำแหน่ง
+
+print(top_dept, late_pct, acc_fine, it_comp_pct)
+assert top_dept == "IT"
+assert late_pct == 33.9
+assert acc_fine == 795
+assert it_comp_pct == 44.6
+print("✅ Step 4 ผ่าน")</code></pre></div>
+    <details><summary>คำใบ้</summary><div>ข้อ it_comp_pct ต้องกรองแผนก IT ก่อน แล้วค่อยหาสัดส่วนหมวดคอมพิวเตอร์ในกลุ่มนั้น ใช้ <code>.mean()</code> แบบ C2 Level 2</div></details>
+    <div class="verify"><b>Human Verify:</b> การบัญชีปรับรวม 795 บาท มากที่สุดทุกแผนก แต่การบัญชีก็ยืมเยอะด้วย ลองหา<b>เปอร์เซ็นต์คืนช้า</b>ของแต่ละแผนกด้วยวิธีที่เรียนแล้ว (กรองทีละแผนกก็ได้) แล้วตอบใน Text cell ว่าการบัญชีคืนช้าบ่อยจริง หรือแค่ยืมเยอะ</div>
+    <label class="check"><input type="checkbox"> รันผ่าน และตอบเรื่องเปอร์เซ็นต์คืนช้าของการบัญชีแล้ว</label>
+  </section>
+  <section class="task" data-task="s5">
+    <div class="task-head"><h3>Step 5 Boss: รายงานถึงบรรณารักษ์</h3><span class="who">ไม่มี assert</span></div>
+    <p>ถ้าคำนวณค่าปรับจากข้อมูลดิบตรง ๆ แบบที่เราทำใน C2 จะได้ตัวเลขไม่ตรงกับ 2,790 บาท ให้หาตัวเลขนั้นก่อน</p>
+<div class="code"><pre><code>import numpy as np
+raw_days = pd.to_numeric(raw["days"], errors="coerce")
+raw_fine = np.where(raw_days &gt; 7, (raw_days - 7) * 5, 0).sum()
+print("ค่าปรับจากข้อมูลดิบ:", raw_fine, "บาท")</code></pre></div>
+    <p>แล้วเพิ่ม Text cell เขียนรายงาน 2 ส่วน</p>
+    <ol class="steps">
+      <li><b>Cleaning Log</b> ตารางแบบ C3 Boss บอกว่าแต่ละขั้นตัดไปกี่แถว เพราะอะไร</li>
+      <li><b>ข้อความถึงบรรณารักษ์</b> 5–6 บรรทัด ภาษาที่คนไม่เขียนโค้ดอ่านเข้าใจ บอกคำตอบ Step 4 ทั้ง 4 ข้อ อธิบายว่าทำไมค่าปรับจริงไม่ใช่ตัวเลขจากข้อมูลดิบ และแนะนำ 1 ข้อว่าควรจดข้อมูลยังไงให้ไม่ผิดอีก</li>
+    </ol>
+    <div class="verify"><b>Human Verify:</b> ค่าปรับจากข้อมูลดิบต่างจาก 2,790 บาทเท่าไร หาให้ได้ว่า<b>แถวไหน</b>ทำให้ต่างมากที่สุด และมีแถวไหนที่ข้อมูลดิบ<b>นับขาด</b>ไปด้วย (ใบ้: ดูแถวที่ days มีคำว่า " วัน") ถ้าให้ AI ช่วยเขียนข้อความถึงบรรณารักษ์ ต้องเช็คทุกตัวเลขในข้อความเทียบกับผลจากโค้ด</div>
+    <label class="check"><input type="checkbox"> เขียน Cleaning Log และข้อความถึงบรรณารักษ์ครบ ตัวเลขในข้อความตรงกับโค้ดทุกตัว</label>
+  </section>
+  <section class="task" data-task="bonus" style="border-left-color:var(--mark)">
+    <div class="task-head"><h3>Bonus วันไหนคนยืมเยอะ</h3><span class="who">ไม่บังคับ</span></div>
+    <p>ใช้ <code>.dt.dayofweek</code> จาก C3 Bonus หาว่าวันไหนในสัปดาห์มีการยืมมากที่สุด (จันทร์ = 0) แล้วตอบด้วยชื่อวันภาษาไทย</p>
+<div class="code"><pre><code># เขียนเอง: busiest_day = ชื่อวันภาษาไทย เช่น "จันทร์"
+
+print(busiest_day)
+assert busiest_day == "ศุกร์"
+print("✅ Bonus ผ่าน")</code></pre></div>
+    <p class="sub">คิดต่อ: ถ้าห้องสมุดจะจัดคนเฝ้าเคาน์เตอร์เพิ่ม 1 วัน ควรเป็นวันไหน และข้อมูลแค่ 5 สัปดาห์พอให้ตัดสินใจไหม</p>
+  </section>
+
+  <h2>Exit Ticket</h2>
+  <p>เพิ่ม Text cell ท้าย notebook แล้วตอบสั้น ๆ</p>
+  <ol class="steps">
+    <li>Step ไหนยากที่สุดเมื่อไม่มีครูพาทำ และแก้ได้ยังไง</li>
+    <li>ฟังก์ชัน clean จาก C3 ช่วยตรงไหน และตรงไหนต้องเขียนใหม่ทั้งหมด</li>
+    <li>ถ้าบรรณารักษ์ไม่เชื่อตัวเลข 2,790 บาท เราจะพิสูจน์ให้ดูยังไง</li>
+  </ol>
+  <div class="note">ถ้าทำเสร็จก่อนหมดคาบ ย้อนไปทำ Level ที่ยังค้างใน C2 หรือ C3 ให้ครบ</div>
+
+  <h2>ส่งงาน</h2>
+  <ol class="steps">
+    <li>กด <b>Runtime › Restart and run all</b> ให้ทุก cell รันผ่านจากบนลงล่าง</li>
+    <li>กด <b>Share</b> เปลี่ยนเป็น <b>Anyone with the link</b> สิทธิ์ <b>Viewer</b></li>
+    <li>กด <b>Copy link</b> แล้วส่งทางช่องทางส่งงานของห้อง</li>
+  </ol>
+</main>
+
+<script src="lesson.js"></script>
+</body>
+</html>
